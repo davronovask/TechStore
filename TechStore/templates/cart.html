@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Корзина — DvrnTechStore</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
+    .gradient-text {
+      background: linear-gradient(45deg, #ff3b3b, #ff6b6b, #ff3b3b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #ff3b3b;
+      box-shadow: 0 0 8px #ff3b3b;
+    }
+    button {
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #e02e2e;
+    }
+    .scrollbar-thin::-webkit-scrollbar {
+      height: 6px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background-color: #ff3b3b;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <header class="fixed top-0 w-full bg-black bg-opacity-90 z-50 shadow-md">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-xl">D</span>
+        </div>
+        <h1 class="text-2xl font-bold gradient-text">DvrnTechStore</h1>
+      </div>
+      <nav class="hidden md:flex space-x-6 text-white">
+        <a href="index.html" class="hover:text-red-500">Главная</a>
+        <a href="catalog.html" class="hover:text-red-500">Каталог</a>
+        <a href="favorites.html" class="hover:text-red-500">Избранное</a>
+        <a href="login.html" class="hover:text-red-500">Вход</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 pt-28 pb-16 min-h-screen">
+    <h2 class="text-4xl font-bold mb-10 text-center gradient-text">Ваша корзина</h2>
+
+    <div class="flex flex-col lg:flex-row gap-10">
+      <!-- Список товаров -->
+      <section class="flex-1 bg-gray-900 rounded-xl p-6 shadow-lg max-h-[600px] overflow-y-auto scrollbar-thin">
+        <h3 class="text-2xl font-semibold mb-6">Товары</h3>
+
+        <ul id="cartItems" class="space-y-6">
+          <!-- Пример товара -->
+          <li class="flex items-center gap-4 border border-gray-700 rounded-lg p-4">
+            <img src="https://placehold.co/100x80" alt="Gaming Laptop Pro" class="w-24 h-20 object-cover rounded" />
+            <div class="flex-1">
+              <h4 class="font-semibold text-lg">Gaming Laptop Pro</h4>
+              <p class="text-gray-400 text-sm">Мощный игровой ноутбук с RTX 4060</p>
+              <p class="text-red-500 font-bold mt-1">89 999 сом</p>
+            </div>
+            <div class="flex flex-col items-center space-y-2">
+              <label for="qty1" class="text-sm">Кол-во</label>
+              <input type="number" id="qty1" min="1" value="1" class="w-16 text-black rounded px-2 py-1" />
+            </div>
+            <button class="text-red-600 hover:text-red-800 text-xl font-bold remove-item" title="Удалить товар">&times;</button>
+          </li>
+          <!-- Добавляй сюда товары динамически -->
+        </ul>
+      </section>
+
+      <!-- Оформление заказа -->
+      <section class="w-full max-w-md bg-gray-900 rounded-xl p-6 shadow-lg">
+        <h3 class="text-2xl font-semibold mb-6">Оформить заказ</h3>
+        <form id="orderForm" class="space-y-5" novalidate>
+          <div>
+            <label for="name" class="block mb-2 font-semibold">Имя</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Ваше имя"
+              class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400"
+            />
+            <p class="mt-1 text-red-500 text-sm hidden" id="nameError">Пожалуйста, введите имя.</p>
+          </div>
+
+          <div>
+            <label for="phone" class="block mb-2 font-semibold">Телефон</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              required
+              placeholder="+996 555 123 456"
+              pattern="^\+996\s?\d{3}\s?\d{3}\s?\d{3}$"
+              class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400"
+            />
+            <p class="mt-1 text-red-500 text-sm hidden" id="phoneError">Введите корректный телефон (+996 XXX XXX XXX).</p>
+          </div>
+
+          <div>
+            <label for="address" class="block mb-2 font-semibold">Адрес доставки</label>
+            <textarea
+              id="address"
+              name="address"
+              required
+              rows="3"
+              placeholder="Улица, дом, квартира"
+              class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 resize-none"
+            ></textarea>
+            <p class="mt-1 text-red-500 text-sm hidden" id="addressError">Пожалуйста, введите адрес.</p>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-lg"
+          >
+            Оформить заказ
+          </button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="bg-black py-12 mt-auto">
+    <div class="container mx-auto px-4 text-center text-gray-400">
+      © 2024 DvrnTechStore. Все права защищены.
+    </div>
+  </footer>
+
+  <script>
+    // Пример статичных товаров в корзине (можно заменить на динамические данные)
+    const cartItemsData = [
+      {
+        id: 1,
+        name: "Gaming Laptop Pro",
+        description: "Мощный игровой ноутбук с RTX 4060",
+        price: 89999,
+        quantity: 1,
+        image: "https://placehold.co/100x80",
+      },
+      {
+        id: 2,
+        name: "Wireless Headphones",
+        description: "Беспроводные наушники с шумоподавлением",
+        price: 12999,
+        quantity: 2,
+        image: "https://placehold.co/100x80",
+      },
+    ];
+
+    const cartItemsContainer = document.getElementById('cartItems');
+
+    function renderCartItems() {
+      cartItemsContainer.innerHTML = '';
+      cartItemsData.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.className = 'flex items-center gap-4 border border-gray-700 rounded-lg p-4';
+        li.dataset.id = item.id;
+        li.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" class="w-24 h-20 object-cover rounded" />
+          <div class="flex-1">
+            <h4 class="font-semibold text-lg">${item.name}</h4>
+            <p class="text-gray-400 text-sm">${item.description}</p>
+            <p class="text-red-500 font-bold mt-1">${item.price.toLocaleString()} сом</p>
+          </div>
+          <div class="flex flex-col items-center space-y-2">
+            <label for="qty${item.id}" class="text-sm">Кол-во</label>
+            <input type="number" id="qty${item.id}" min="1" value="${item.quantity}" class="w-16 text-black rounded px-2 py-1" />
+          </div>
+          <button class="text-red-600 hover:text-red-800 text-xl font-bold remove-item" title="Удалить товар">&times;</button>
+        `;
+        cartItemsContainer.appendChild(li);
+      });
+    }
+
+    function calculateTotal() {
+      return cartItemsData.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    }
+
+    function updateTotalDisplay() {
+      let totalEl = document.getElementById('totalPrice');
+      if (!totalEl) {
+        totalEl = document.createElement('p');
+        totalEl.id = 'totalPrice';
+        totalEl.className = 'text-2xl font-bold text-red-500 mt-6 text-right';
+        document.querySelector('main > div > section.w-full.max-w-md.bg-gray-900').appendChild(totalEl);
+      }
+      totalEl.textContent = `Итого: ${calculateTotal().toLocaleString()} сом`;
+    }
+
+    // Инициализация
+    renderCartItems();
+    updateTotalDisplay();
+
+    // Обработчики событий
+    cartItemsContainer.addEventListener('input', (e) => {
+      if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+        const li = e.target.closest('li');
+        const id = Number(li.dataset.id);
+        const item = cartItemsData.find(i => i.id === id);
+        let val = parseInt(e.target.value);
+        if (isNaN(val) || val < 1) {
+          val = 1;
+          e.target.value = val;
+        }
+        item.quantity = val;
+        updateTotalDisplay();
+      }
+    });
+
+    cartItemsContainer.addEventListener('click', (e) => {
+      if (e.target.classList.contains('remove-item')) {
+        const li = e.target.closest('li');
+        const id = Number(li.dataset.id);
+        const index = cartItemsData.findIndex(i => i.id === id);
+        if (index !== -1) {
+          cartItemsData.splice(index, 1);
+          renderCartItems();
+          updateTotalDisplay();
+        }
+      }
+    });
+
+    // Валидация и отправка формы заказа
+    const orderForm = document.getElementById('orderForm');
+    const nameInput = orderForm.name;
+    const phoneInput = orderForm.phone;
+    const addressInput = orderForm.address;
+
+    const nameError = document.getElementById('nameError');
+    const phoneError = document.getElementById('phoneError');
+    const addressError = document.getElementById('addressError');
+
+    orderForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      let valid = true;
+
+      if (nameInput.value.trim() === '') {
+        nameError.classList.remove('hidden');
+        valid = false;
+      } else {
+        nameError.classList.add('hidden');
+      }
+
+      const phonePattern = /^\+996\s?\d{3}\s?\d{3}\s?\d{3}$/;
+      if (!phonePattern.test(phoneInput.value.trim())) {
+        phoneError.classList.remove('hidden');
+        valid = false;
+      } else {
+        phoneError.classList.add('hidden');
+      }
+
+      if (addressInput.value.trim() === '') {
+        addressError.classList.remove('hidden');
+        valid = false;
+      } else {
+        addressError.classList.add('hidden');
+      }
+
+      if (cartItemsData.length === 0) {
+        alert('Ваша корзина пуста!');
+        valid = false;
+      }
+
+      if (valid) {
+        alert('Спасибо за заказ! Мы свяжемся с вами в ближайшее время.');
+        orderForm.reset();
+        cartItemsData.length = 0;
+        renderCartItems();
+        updateTotalDisplay();
+      }
+    });
+  </script>
+</body>
+</html>

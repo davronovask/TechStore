@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Избранное — DvrnTechStore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #ff3b3b, #ff6b6b, #ff3b3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .favorite-card {
+            background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .favorite-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(255, 59, 59, 0.2);
+            border-color: #ff3b3b;
+        }
+        .remove-btn {
+            transition: all 0.3s ease;
+        }
+        .remove-btn:hover {
+            transform: scale(1.1);
+            color: #ff3b3b;
+        }
+        .add-to-cart {
+            transition: all 0.3s ease;
+        }
+        .add-to-cart.added {
+            background: #00ff00 !important;
+            color: #000 !important;
+        }
+        .empty-state {
+            background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 2px dashed #ff3b3b;
+        }
+        /* Toast styles */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 9999;
+            opacity: 0.95;
+            animation: fadeinout 2s forwards;
+        }
+        .toast-success {
+            background-color: #22c55e; /* green-500 */
+        }
+        .toast-error {
+            background-color: #ef4444; /* red-500 */
+        }
+        @keyframes fadeinout {
+            0% {opacity: 0; transform: translateY(-10px);}
+            10%, 90% {opacity: 0.95; transform: translateY(0);}
+            100% {opacity: 0; transform: translateY(-10px);}
+        }
+    </style>
+</head>
+<body>
+    <header class="fixed top-0 w-full bg-black bg-opacity-90 z-50 shadow-md">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">D</span>
+                </div>
+                <h1 class="text-2xl font-bold gradient-text">DvrnTechStore</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-white">
+                <a href="index.html" class="hover:text-red-500">Главная</a>
+                <a href="catalog.html" class="hover:text-red-500">Каталог</a>
+                <a href="cart.html" class="hover:text-red-500">Корзина</a>
+                <a href="login.html" class="hover:text-red-500">Вход</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 pt-28 pb-16 min-h-screen">
+        <h2 class="text-4xl font-bold mb-10 text-center gradient-text">Избранное</h2>
+
+        <div id="favoritesContainer">
+            <!-- Избранные товары будут загружаться здесь -->
+        </div>
+
+        <!-- Состояние "пусто" -->
+        <div id="emptyState" class="empty-state rounded-xl p-12 text-center hidden">
+            <div class="text-6xl mb-6 text-red-500">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h3 class="text-2xl font-semibold mb-4">Ваше избранное пусто</h3>
+            <p class="text-gray-400 mb-8">Добавьте товары в избранное, чтобы не потерять их</p>
+            <a href="catalog.html" class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                Перейти в каталог
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-black py-12">
+        <div class="container mx-auto px-4 text-center text-gray-400">
+            © 2024 DvrnTechStore. Все права защищены.
+        </div>
+    </footer>
+
+    <script>
+        // Пример данных избранных товаров (в реальном приложении брать из localStorage или API)
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [
+            {
+                id: 1,
+                name: "Gaming Laptop Pro",
+                description: "Мощный игровой ноутбук с RTX 4060, 16GB RAM, SSD 1TB",
+                price: 89999,
+                category: "laptops",
+                inStock: true,
+                image: "https://placehold.co/300x200",
+                isNew: true
+            },
+            {
+                id: 3,
+                name: "Wireless Headphones",
+                description: "Беспроводные наушники с шумоподавлением, до 30 часов работы",
+                price: 12999,
+                category: "accessories",
+                inStock: true,
+                image: "https://placehold.co/300x200",
+                isNew: true
+            },
+            {
+                id: 6,
+                name: "Gaming Console X",
+                description: "Новая игровая консоль 2024 года, 4K gaming, 1TB SSD",
+                price: 129999,
+                category: "gaming",
+                inStock: true,
+                image: "https://placehold.co/300x200",
+                isNew: true
+            }
+        ];
+
+        // Сохраняем в localStorage для демонстрации
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 2000);
+        }
+
+        function renderFavorites() {
+            const container = document.getElementById('favoritesContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            if (favorites.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${favorites.map(product => `
+                        <div class="favorite-card rounded-xl p-4 relative" data-id="${product.id}">
+                            <button class="remove-btn absolute top-4 right-4 text-gray-400 hover:text-red-500 text-xl"
+                                    title="Удалить из избранного" aria-label="Удалить из избранного">
+                                &times;
+                            </button>
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover rounded-lg mb-4" />
+                            ${product.isNew ? '<span class="bg-red-600 text-white text-xs px-2 py-1 rounded mb-2 inline-block">NEW</span>' : ''}
+                            <h3 class="font-semibold text-lg mb-2">${product.name}</h3>
+                            <p class="text-gray-400 text-sm mb-3">${product.description}</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-red-500 font-bold text-xl">${product.price.toLocaleString()} сом</span>
+                                <span class="text-sm ${product.inStock ? 'text-green-500' : 'text-red-500'}">
+                                    ${product.inStock ? 'В наличии' : 'Нет в наличии'}
+                                </span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 ${!product.inStock ? 'opacity-50 cursor-not-allowed' : ''}"
+                                        ${!product.inStock ? 'disabled' : ''}>
+                                    ${product.inStock ? 'В корзину' : 'Нет в наличии'}
+                                </button>
+                                <button class="w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" title="Посмотреть товар">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="mt-8 p-6 bg-gray-900 rounded-xl">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div>
+                            <p class="text-lg">
+                                Всего товаров: <span class="font-semibold text-red-500">${favorites.length}</span>
+                            </p>
+                            <p class="text-gray-400 text-sm">
+                                Сохраняйте понравившиеся товары для быстрого доступа
+                            </p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button class="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors" id="clearAllBtn">
+                                Очистить всё
+                            </button>
+                            <button class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors" id="addAllToCartBtn">
+                                Добавить всё в корзину
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Добавляем обработчики кнопок удаления и добавления в корзину
+            document.querySelectorAll('.favorite-card .remove-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const card = btn.closest('.favorite-card');
+                    const id = Number(card.dataset.id);
+                    removeFromFavorites(id);
+                });
+            });
+
+            document.querySelectorAll('.favorite-card .add-to-cart').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const card = btn.closest('.favorite-card');
+                    const id = Number(card.dataset.id);
+                    addToCart(id, btn);
+                });
+            });
+
+            document.getElementById('clearAllBtn').addEventListener('click', () => {
+                clearAllFavorites();
+            });
+
+            document.getElementById('addAllToCartBtn').addEventListener('click', () => {
+                addAllToCart();
+            });
+        }
+
+        function removeFromFavorites(productId) {
+            favorites = favorites.filter(product => product.id !== productId);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            renderFavorites();
+            showToast('Товар удалён из избранного', 'error');
+        }
+
+        function addToCart(productId, button) {
+            const product = favorites.find(p => p.id === productId);
+            if (!product || !product.inStock) return;
+
+            button.classList.add('added');
+            button.textContent = 'Добавлено!';
+            showToast('Товар добавлен в корзину', 'success');
+
+            setTimeout(() => {
+                button.classList.remove('added');
+                button.textContent = 'В корзину';
+            }, 2000);
+        }
+
+        function clearAllFavorites() {
+            if (confirm('Вы уверены, что хотите очистить всё избранное?')) {
+                favorites = [];
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                renderFavorites();
+                showToast('Избранное очищено', 'error');
+            }
+        }
+
+        function addAllToCart() {
+            if (favorites.length === 0) {
+                showToast('Избранное пусто', 'error');
+                return;
+            }
+            showToast('Все товары добавлены в корзину', 'success');
+            // Здесь можно добавить логику добавления всех товаров в корзину
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFavorites();
+        });
+    </script>
+</body>
+</html>

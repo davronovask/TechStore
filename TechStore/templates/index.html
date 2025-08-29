@@ -3,1289 +3,525 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechStore - Интернет-магазин техники</title>
+    <title>DvrnTechStore - Магазин техники</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #171717;
-            --secondary: #262626;
-            --accent: #525252;
-            --light: #d4d4d4;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f5f5f5;
-            color: var(--primary);
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
-        .nav-link:hover {
-            color: var(--accent);
+        .header-gradient {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+        }
+
+        .product-card {
+            background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #333;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 30px rgba(255, 59, 59, 0.2);
+            border-color: #ff3b3b;
+        }
+
+        .neon-glow {
+            text-shadow: 0 0 10px rgba(255, 59, 59, 0.7), 0 0 20px rgba(255, 59, 59, 0.4);
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #ff3b3b, #ff6b6b, #ff3b3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-border {
+            border-bottom: 1px solid #333;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff3b3b, #ff6b6b);
             transition: all 0.3s ease;
         }
 
-        .heart-icon:hover, .favorite-icon:hover {
-            transform: scale(1.2);
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 59, 59, 0.4);
+        }
+
+        .category-btn {
             transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
 
-        .carousel-container {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .carousel-track {
-            display: flex;
-            transition: transform 0.5s ease;
-        }
-
-        .carousel-item {
-            min-width: 100%;
-        }
-
-        .add-to-cart:hover {
-            background-color: var(--secondary);
-            transition: all 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px var(--accent);
-        }
-
-        .discount-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #dc2626;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .zoom-effect {
-            transition: transform 0.3s ease;
-        }
-
-        .zoom-effect:hover {
+        .category-btn:hover {
+            border-color: #ff3b3b;
             transform: scale(1.05);
         }
 
-        .modal {
-            transition: opacity 0.3s ease;
+        .category-btn.active {
+            border-color: #ff3b3b;
+            background: rgba(255, 59, 59, 0.1);
         }
 
-        footer {
-            margin-top: auto;
+        .cart-badge {
+            animation: pulse 2s infinite;
         }
 
-        .active-tab {
-            border-bottom: 2px solid var(--primary);
-            font-weight: bold;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .carousel-item {
+            transition: transform 0.5s ease;
+        }
+
+        .add-to-cart {
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart.added {
+            background: #00ff00 !important;
+            color: #000 !important;
+        }
+
+        .scroll-smooth {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
-<body>
+<body class="scroll-smooth">
     <!-- Header -->
-    <header class="bg-black text-gray-300 py-4 px-6 sticky top-0 z-50 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <h1 class="text-xl font-bold text-white">TechStore</h1>
-                <nav class="hidden md:flex space-x-6">
-                    <a href="#" class="nav-link hover:text-white active-tab" data-tab="home">Главная</a>
-                    <a href="#" class="nav-link hover:text-white" data-tab="catalog">Каталог</a>
-                    <a href="#" class="nav-link hover:text-white" data-tab="new">Новинки</a>
-                    <a href="#" class="nav-link hover:text-white" data-tab="sales">Акции</a>
-                    <a href="#" class="nav-link hover:text-white" data-tab="contacts">Контакты</a>
-                </nav>
-            </div>
-
-            <div class="flex items-center space-x-4">
-                <div class="relative">
-                    <input type="text" placeholder="Поиск..." class="search-input bg-gray-800 text-white px-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500 w-40 md:w-64">
-                    <button class="absolute right-3 top-2 text-gray-400 hover:text-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </button>
+    <header class="header-gradient fixed w-full top-0 z-50 shadow-2xl">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">D</span>
+                    </div>
+                    <h1 class="text-2xl font-bold gradient-text">DvrnTechStore</h1>
                 </div>
 
-                <button id="account-btn" class="text-white bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-full text-sm font-medium transition">
-                    Войти
-                </button>
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-white hover:text-red-500 transition-colors">Главная</a>
+                    <a href="#catalog" class="text-white hover:text-red-500 transition-colors">Каталог</a>
+                    <a href="#new" class="text-white hover:text-red-500 transition-colors">Новинки</a>
+                    <a href="#sales" class="text-white hover:text-red-500 transition-colors">Акции</a>
+                    <a href="#contacts" class="text-white hover:text-red-500 transition-colors">Контакты</a>
+                </nav>
 
-                <button id="cart-btn" class="relative">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center cart-counter">0</span>
-                </button>
-
-                <button id="favorite-btn" class="relative">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white favorite-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                    <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center favorite-counter">0</span>
-                </button>
-
-                <button class="md:hidden text-white" id="mobile-menu-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
+                <!-- User Actions -->
+                <div class="flex items-center space-x-4">
+                    <button class="text-white hover:text-red-500 transition-colors">
+                        <i class="fas fa-heart text-lg"></i>
+                    </button>
+                    <button class="relative text-white hover:text-red-500 transition-colors">
+                        <i class="fas fa-shopping-cart text-lg"></i>
+                        <span class="cart-badge absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                    </button>
+                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                        <i class="fas fa-user mr-2"></i>Войти
+                    </button>
+                    <button class="border border-red-600 text-red-500 px-4 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-colors">
+                        Регистрация
+                    </button>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden bg-gray-900 text-white p-4">
-        <nav class="flex flex-col space-y-4">
-            <a href="#" class="nav-link hover:text-white" data-tab="home">Главная</a>
-            <a href="#" class="nav-link hover:text-white" data-tab="catalog">Каталог</a>
-            <a href="#" class="nav-link hover:text-white" data-tab="new">Новинки</a>
-            <a href="#" class="nav-link hover:text-white" data-tab="sales">Акции</a>
-            <a href="#" class="nav-link hover:text-white" data-tab="contacts">Контакты</a>
-            <a href="#" class="nav-link hover:text-white" data-tab="account">Мой аккаунт</a>
-        </nav>
-    </div>
-
-    <!-- Login Modal -->
-    <div id="account-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full relative">
-            <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-
-            <div id="login-form">
-                <h2 class="text-2xl font-bold text-white mb-6">Вход / Регистрация</h2>
-                <form>
-                    <div class="mb-4">
-                        <label for="email" class="block text-gray-300 mb-2">Email</label>
-                        <input type="email" id="email" class="w-full bg-gray-700 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-500" required>
-                    </div>
-                    <div class="mb-6">
-                        <label for="password" class="block text-gray-300 mb-2">Пароль</label>
-                        <input type="password" id="password" class="w-full bg-gray-700 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-500" required>
-                    </div>
-                    <button type="submit" class="w-full bg-black text-white py-2 rounded hover:bg-gray-900 transition mb-4">Войти</button>
-                    <button type="button" class="w-full text-center text-gray-400 hover:text-white transition mb-2" id="show-register">Нет аккаунта? Зарегистрироваться</button>
-                    <button type="button" class="w-full text-center text-gray-400 hover:text-white transition">Забыли пароль?</button>
-                </form>
-            </div>
-
-            <div id="register-form" class="hidden">
-                <h2 class="text-2xl font-bold text-white mb-6">Регистрация</h2>
-                <form>
-                    <div class="mb-4">
-                        <label for="reg-name" class="block text-gray-300 mb-2">Имя</label>
-                        <input type="text" id="reg-name" class="w-full bg-gray-700 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-500" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="reg-email" class="block text-gray-300 mb-2">Email</label>
-                        <input type="email" id="reg-email" class="w-full bg-gray-700 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-500" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="reg-password" class="block text-gray-300 mb-2">Пароль</label>
-                        <input type="password" id="reg-password" class="w-full bg-gray-700 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-500" required>
-                    </div>
-                    <div class="mb-6">
-                        <label for="reg-confirm" class="block text-gray-300 mb-2">Подтвердите пароль</label>
-                        <input type="password" id="reg-confirm" class="w-full bg-gray-700 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-500" required>
-                    </div>
-                    <button type="submit" class="w-full bg-black text-white py-2 rounded hover:bg-gray-900 transition mb-4">Зарегистрироваться</button>
-                    <button type="button" class="w-full text-center text-gray-400 hover:text-white transition" id="show-login">Уже есть аккаунт? Войти</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cart Modal -->
-    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-gray-800 rounded-lg p-8 max-w-2xl w-full relative max-h-[80vh] overflow-y-auto">
-            <button id="close-cart-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-
-            <h2 class="text-2xl font-bold text-white mb-6">Корзина</h2>
-
-            <div id="cart-items" class="mb-6">
-                <!-- Cart items will be added here dynamically -->
-                <p class="text-gray-400 text-center py-4">Ваша корзина пуста</p>
-            </div>
-
-            <div class="border-t border-gray-700 pt-4">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-gray-300">Итого:</span>
-                    <span class="text-xl font-bold text-white" id="cart-total">0 ₽</span>
-                </div>
-                <button id="checkout-btn" class="w-full bg-black text-white py-3 rounded hover:bg-gray-900 transition font-bold">Оформить заказ</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Favorites Modal -->
-    <div id="favorites-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-gray-800 rounded-lg p-8 max-w-2xl w-full relative max-h-[80vh] overflow-y-auto">
-            <button id="close-favorites-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-
-            <h2 class="text-2xl font-bold text-white mb-6">Избранное</h2>
-
-            <div id="favorites-items" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Favorites items will be added here dynamically -->
-                <p class="text-gray-400 text-center py-4 col-span-2">У вас пока нет избранных товаров</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Product Details Modal -->
-    <div id="product-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-gray-800 rounded-lg p-8 max-w-4xl w-full relative max-h-[90vh] overflow-y-auto">
-            <button id="close-product-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Hero Section -->
+    <section id="home" class="pt-32 pb-20 bg-gradient-to-b from-black to-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
-                    <img id="product-modal-image" src="https://placehold.co/600x600" alt="Изображение товара" class="w-full rounded-lg mb-4">
-                    <div class="grid grid-cols-4 gap-2">
-                        <img src="https://placehold.co/100x100" alt="Дополнительное изображение 1" class="cursor-pointer border border-gray-600 hover:border-white rounded">
-                        <img src="https://placehold.co/100x100" alt="Дополнительное изображение 2" class="cursor-pointer border border-gray-600 hover:border-white rounded">
-                        <img src="https://placehold.co/100x100" alt="Дополнительное изображение 3" class="cursor-pointer border border-gray-600 hover:border-white rounded">
-                        <img src="https://placehold.co/100x100" alt="Дополнительное изображение 4" class="cursor-pointer border border-gray-600 hover:border-white rounded">
-                    </div>
-                </div>
-
-                <div>
-                    <h2 id="product-modal-title" class="text-2xl font-bold text-white mb-2">Название товара</h2>
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400">
-                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                        </div>
-                        <span class="text-sm text-gray-400 ml-2">12 отзывов</span>
-                        <span class="text-sm text-green-500 ml-4">В наличии</span>
-                    </div>
-
-                    <div class="mb-6">
-                        <span id="product-modal-price" class="text-3xl font-bold text-white">99 990 ₽</span>
-                        <span id="product-modal-old-price" class="text-lg text-gray-500 line-through ml-2">119 990 ₽</span>
-                    </div>
-
-                    <div class="flex items-center space-x-4 mb-6">
-                        <div class="flex items-center border border-gray-600 rounded">
-                            <button class="px-3 py-1 text-white text-xl">-</button>
-                            <span class="px-4 text-white">1</span>
-                            <button class="px-3 py-1 text-white text-xl">+</button>
-                        </div>
-                        <button id="add-to-cart-modal-btn" class="flex-1 bg-black text-white py-2 px-4 rounded hover:bg-gray-900 transition">Добавить в корзину</button>
-                        <button id="add-to-favorites-modal-btn" class="p-2 text-gray-400 hover:text-red-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
+                    <h2 class="text-5xl font-bold mb-6 neon-glow">
+                        Техника <span class="gradient-text">будущего</span><br>уже сегодня
+                    </h2>
+                    <p class="text-gray-300 text-lg mb-8">
+                        Самые современные гаджеты и техника по лучшим ценам в Кыргызстане.
+                        Открой для себя мир технологий с DvrnTechStore.
+                    </p>
+                    <div class="flex space-x-4">
+                        <button class="btn-primary px-8 py-3 rounded-lg text-white font-semibold">
+                            Смотреть каталог
+                        </button>
+                        <button class="border border-gray-600 text-white px-8 py-3 rounded-lg hover:border-red-500 transition-colors">
+                            Подробнее
                         </button>
                     </div>
-
-                    <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-white mb-2">Характеристики</h3>
-                        <ul class="text-gray-300 space-y-2">
-                            <li class="flex justify-between border-b border-gray-700 pb-1">
-                                <span>Бренд:</span>
-                                <span>Samsung</span>
-                            </li>
-                            <li class="flex justify-between border-b border-gray-700 pb-1">
-                                <span>Модель:</span>
-                                <span>RS68A8841SL</span>
-                            </li>
-                            <li class="flex justify-between border-b border-gray-700 pb-1">
-                                <span>Цвет:</span>
-                                <span>Металлик</span>
-                            </li>
-                            <li class="flex justify-between border-b border-gray-700 pb-1">
-                                <span>Гарантия:</span>
-                                <span>24 месяца</span>
-                            </li>
-                        </ul>
-                    </div>
+                </div>
+                <div class="relative">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4a70f3cc-dd3f-41d4-950d-3c3ee7c2ed21.png" alt="Modern technology gadgets showcase with sleek design and neon lighting" class="rounded-2xl shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-black/50 to-black/80 rounded-2xl"></div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="mt-8">
-                <h3 class="text-xl font-bold text-white mb-4">Описание</h3>
-                <p id="product-modal-description" class="text-gray-300">
-                    Здесь будет подробное описание товара, его преимущества и особенности. Этот текст будет меняться в зависимости от выбранного товара.
-                </p>
-            </div>
 
-            <div class="mt-8">
-                <h3 class="text-xl font-bold text-white mb-4">Отзывы (3)</h3>
-                <div class="space-y-4">
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                            </div>
-                            <span class="text-sm text-gray-400 ml-2">Иван П., 15.05.2023</span>
-                        </div>
-                        <p class="text-gray-300">Отличный товар, полностью соответствует описанию. Работает бесшумно, удобен в использовании.</p>
+    <!-- Catalog Section -->
+    <section id="catalog" class="py-16 bg-black section-border">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Каталог товаров</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Product 1 -->
+                <div class="product-card rounded-xl p-4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6bf9cb15-94a8-43bb-b244-2b7be006d3c9.png" alt="Gaming laptop with RGB keyboard and sleek design" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="font-semibold text-lg mb-2">Gaming Laptop Pro</h3>
+                    <p class="text-gray-400 text-sm mb-3">Мощный игровой ноутбук с RTX 4060</p>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-red-500 font-bold text-xl">89 999 сом</span>
+                        <span class="text-green-500 text-sm">В наличии</span>
                     </div>
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span>
-                            </div>
-                            <span class="text-sm text-gray-400 ml-2">Елена К., 08.04.2023</span>
-                        </div>
-                        <p class="text-gray-300">Хороший товар, но доставка заняла больше времени, чем ожидалось.</p>
+                    <div class="flex space-x-2">
+                        <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
+                            В корзину
+                        </button>
+                        <button class="w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600">
+                            <i class="fas fa-heart"></i>
+                        </button>
                     </div>
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                            </div>
-                            <span class="text-sm text-gray-400 ml-2">Сергей М., 22.03.2023</span>
-                        </div>
-                        <p class="text-gray-300">Прекрасное качество, рекомендую всем знакомым.</p>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card rounded-xl p-4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6136f5e2-d6f8-4898-9332-a7c0413351d8.png" alt="Ultra-thin business laptop with metal finish" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="font-semibold text-lg mb-2">UltraBook Business</h3>
+                    <p class="text-gray-400 text-sm mb-3">Стильный ультрабук для работы</p>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-red-500 font-bold text-xl">64 500 сом</span>
+                        <span class="text-green-500 text-sm">В наличии</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
+                            В корзину
+                        </button>
+                        <button class="w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card rounded-xl p-4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/93bef984-6fc8-45c5-96a7-7ee7fec0ab33.png" alt="Wireless headphones with noise cancellation" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="font-semibold text-lg mb-2">Wireless Headphones</h3>
+                    <p class="text-gray-400 text-sm mb-3">Беспроводные наушники с шумоподавлением</p>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-red-500 font-bold text-xl">12 999 сом</span>
+                        <span class="text-green-500 text-sm">В наличии</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
+                            В корзину
+                        </button>
+                        <button class="w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card rounded-xl p-4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/bc48cc29-e184-4ebb-a764-68759245b41a.png" alt="Smart watch with fitness tracking features" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="font-semibold text-lg mb-2">Smart Watch Pro</h3>
+                    <p class="text-gray-400 text-sm mb-3">Умные часы с отслеживанием здоровья</p>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-red-500 font-bold text-xl">8 499 сом</span>
+                        <span class="text-green-500 text-sm">В наличии</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
+                            В корзину
+                        </button>
+                        <button class="w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600">
+                            <i class="fas fa-heart"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Main Content -->
-    <main>
-        <!-- Hero Section -->
-        <section class="relative bg-gradient-to-r from-black to-gray-800 text-white h-96 flex items-center">
-            <div class="container mx-auto px-6">
-                <div class="text-center md:text-left">
-                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Премиум техника для вашего дома</h1>
-                    <p class="text-xl md:text-2xl mb-8 text-gray-300">Лучшие предложения на холодильники, телевизоры и многое другое</p>
-                    <button class="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-200 transition duration-300" data-tab="catalog">Каталог товаров</button>
+    <!-- New Products Carousel -->
+    <section id="new" class="py-16 bg-gray-900 section-border">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Новинки</h2>
+            <div class="relative">
+                <div class="carousel-container overflow-hidden">
+                    <div class="carousel-track flex space-x-6">
+                        <!-- New Product 1 -->
+                        <div class="carousel-item product-card min-w-[300px] rounded-xl p-4">
+                            <div class="relative">
+                                <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">NEW</span>
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e76642c8-4b62-46f5-9b1f-842d6e052bde.png" alt="Latest gaming console with wireless controllers" class="w-full h-48 object-cover rounded-lg mb-4">
+                            </div>
+                            <h3 class="font-semibold text-lg mb-2">Gaming Console X</h3>
+                            <p class="text-gray-400 text-sm mb-3">Новая игровая консоль 2024</p>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-red-500 font-bold text-xl">129 999 сом</span>
+                                <span class="text-green-500 text-sm">В наличии</span>
+                            </div>
+                            <button class="add-to-cart w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
+                                В корзину
+                            </button>
+                        </div>
+
+                        <!-- New Product 2 -->
+                        <div class="carousel-item product-card min-w-[300px] rounded-xl p-4">
+                            <div class="relative">
+                                <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">NEW</span>
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e25dc362-3fb5-4525-abd3-3c5c742580fb.png" alt="4K Ultra HD Smart TV with thin bezels" class="w-full h-48 object-cover rounded-lg mb-4">
+                            </div>
+                            <h3 class="font-semibold text-lg mb-2">4K Smart TV 65"</h3>
+                            <p class="text-gray-400 text-sm mb-3">Умный телевизор с 4K разрешением</p>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-red-500 font-bold text-xl">78 999 сом</span>
+                                <span class="text-green-500 text-sm">В наличии</span>
+                            </div>
+                            <button class="add-to-cart w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
+                                В корзину
+                            </button>
+                        </div>
+
+                        <!-- New Product 3 -->
+                        <div class="carousel-item product-card min-w-[300px] rounded-xl p-4">
+                            <div class="relative">
+                                <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">NEW</span>
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6675ae52-ca5c-4c2f-81be-023f9265722f.png" alt="Wireless charging station for multiple devices" class="w-full h-48 object-cover rounded-lg mb-4">
+                            </div>
+                            <h3 class="font-semibold text-lg mb-2">Wireless Charger</h3>
+                            <p class="text-gray-400 text-sm mb-3">Беспроводная зарядка 3-в-1</p>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-red-500 font-bold text-xl">5 999 сом</span>
+                                <span class="text-green-500 text-sm">В наличии</span>
+                            </div>
+                            <button class="add-to-cart w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
+                                В корзину
+                            </button>
+                        </div>
+
+                        <!-- New Product 4 -->
+                        <div class="carousel-item product-card min-w-[300px] rounded-xl p-4">
+                            <div class="relative">
+                                <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">NEW</span>
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/bbfc63b6-dfe0-4f89-a211-db3effa73f87.png" alt="Portable SSD drive with high-speed data transfer" class="w-full h-48 object-cover rounded-lg mb-4">
+                            </div>
+                            <h3 class="font-semibold text-lg mb-2">Portable SSD 2TB</h3>
+                            <p class="text-gray-400 text-sm mb-3">Высокоскоростной SSD накопитель</p>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-red-500 font-bold text-xl">15 999 сом</span>
+                                <span class="text-green-500 text-sm">В наличии</span>
+                            </div>
+                            <button class="add-to-cart w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
+                                В корзину
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-prev absolute left-0 top-1/2 transform -translate-y-1/2 bg-black/50 p-3 rounded-full text-white">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-next absolute right-0 top-1/2 transform -translate-y-1/2 bg-black/50 p-3 rounded-full text-white">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sales Section -->
+    <section id="sales" class="py-16 bg-black section-border">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Акции</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-8 text-white">
+                    <h3 class="text-2xl font-bold mb-4">Скидка 20% на все ноутбуки</h3>
+                    <p class="mb-6">Только этой неделей получите скидку 20% на весь ассортимент ноутбуков.</p>
+                    <button class="bg-white text-red-600 px-6 py-2 rounded-lg font-semibold">
+                        Посмотреть товары
+                    </button>
+                </div>
+                <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-8 text-white border border-red-500">
+                    <h3 class="text-2xl font-bold mb-4">Рассрочка 0%</h3>
+                    <p class="mb-6">Покупайте технику в рассрочку без процентов на 6 месяцев.</p>
+                    <button class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold">
+                        Узнать условия
+                    </button>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Featured Categories -->
-        <section class="py-12 bg-gray-100" id="home">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold mb-8 text-center">Популярные категории</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="bg-white rounded-lg overflow-hidden shadow-md cursor-pointer zoom-effect" data-category="refrigerators">
-                        <img src="https://placehold.co/400x300?text=Холодильники" alt="Современные холодильники с технологией No Frost в разных цветах и размерах" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <h3 class="text-lg font-semibold">Холодильники</h3>
-                            <p class="text-gray-600">123 товара</p>
+    <!-- Contacts Section -->
+    <section id="contacts" class="py-16 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Контакты</h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">Наши контакты</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-map-marker-alt text-red-500"></i>
+                            <span>г. Бишкек, ул. Советская 123</span>
                         </div>
-                    </div>
-                    <div class="bg-white rounded-lg overflow-hidden shadow-md cursor-pointer zoom-effect" data-category="tvs">
-                        <img src="https://placehold.co/400x300?text=Телевизоры" alt="Ультратонкие 4K телевизоры с изогнутыми экранами на современной стене" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <h3 class="text-lg font-semibold">Телевизоры</h3>
-                            <p class="text-gray-600">87 товаров</p>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-phone text-red-500"></i>
+                            <span>+996 (555) 123-456</span>
                         </div>
-                    </div>
-                    <div class="bg-white rounded-lg overflow-hidden shadow-md cursor-pointer zoom-effect" data-category="washing-machines">
-                        <img src="https://placehold.co/400x300?text=Стиральные+машины" alt="Встраиваемые стиральные машины с сенсорным управлением" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <h3 class="text-lg font-semibold">Стиральные машины</h3>
-                            <p class="text-gray-600">65 товаров</p>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-envelope text-red-500"></i>
+                            <span>info@dvrntech.kg</span>
                         </div>
-                    </div>
-                    <div class="bg-white rounded-lg overflow-hidden shadow-md cursor-pointer zoom-effect" data-category="kitchen">
-                        <img src="https://placehold.co/400x300?text=Кухонная+техника" alt="Современная кухонная техника в элегантном дизайне" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <h3 class="text-lg font-semibold">Кухонная техника</h3>
-                            <p class="text-gray-600">148 товаров</p>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-clock text-red-500"></i>
+                            <span>Пн-Пт: 9:00-18:00, Сб-Вс: 10:00-16:00</span>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Featured Products -->
-        <section class="py-12 bg-white" id="featured-products">
-            <div class="container mx-auto px-6">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-3xl font-bold">Рекомендуемые товары</h2>
-                    <a href="#" class="text-gray-600 hover:text-black" data-tab="catalog">Все товары →</a>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Product 1 -->
-                    <div class="product-card bg-gray-50 rounded-lg overflow-hidden shadow-md relative" data-product-id="1">
-                        <div class="discount-badge">-20%</div>
-                        <div class="relative">
-                            <img src="https://placehold.co/300x300?text=Холодильник+Samsung" alt="Современный холодильник Samsung Side by Side с цифровой панелью управления и большим морозильником" class="w-full h-64 object-contain p-4">
-                            <button class="heart-icon absolute top-2 left-2 text-gray-400 hover:text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold">Холодильник Samsung RS68A8841SL</h3>
-                            <div class="flex items-center mb-2">
-                                <div class="flex text-yellow-400">
-                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                                </div>
-                                <span class="text-sm text-gray-600 ml-1">(23)</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xl font-bold">89 990 ₽</span>
-                                <span class="text-sm text-gray-500 line-through ml-2">112 490 ₽</span>
-                            </div>
-                            <button class="add-to-cart w-full mt-4 bg-black text-white py-2 rounded hover:bg-gray-800">Добавить в корзину</button>
-                        </div>
-                    </div>
-
-                    <!-- Product 2 -->
-                    <div class="product-card bg-gray-50 rounded-lg overflow-hidden shadow-md relative" data-product-id="2">
-                        <div class="relative">
-                            <img src="https://placehold.co/300x300?text=LG+OLED+TV" alt="Ультратонкий телевизор LG OLED 65 с магическим пультом и тонкой рамкой" class="w-full h-64 object-contain p-4">
-                            <button class="heart-icon absolute top-2 left-2 text-gray-400 hover:text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold">Телевизор LG OLED55C3 55"</h3>
-                            <div class="flex items-center mb-2">
-                                <div class="flex text-yellow-400">
-                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                                </div>
-                                <span class="text-sm text-gray-600 ml-1">(45)</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xl font-bold">124 990 ₽</span>
-                            </div>
-                            <button class="add-to-cart w-full mt-4 bg-black text-white py-2 rounded hover:bg-gray-800">Добавить в корзину</button>
-                        </div>
-                    </div>
-
-                    <!-- Product 3 -->
-                    <div class="product-card bg-gray-50 rounded-lg overflow-hidden shadow-md relative" data-product-id="3">
-                        <div class="discount-badge">-15%</div>
-                        <div class="relative">
-                            <img src="https://placehold.co/300x300?text=Встраиваемая+духовка" alt="Встраиваемая духовка с сенсорным управлением и конвекцией от Bosch" class="w-full h-64 object-contain p-4">
-                            <button class="heart-icon absolute top-2 left-2 text-gray-400 hover:text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold">Духовой шкаф Bosch HMT85</h3>
-                            <div class="flex items-center mb-2">
-                                <div class="flex text-yellow-400">
-                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span>
-                                </div>
-                                <span class="text-sm text-gray-600 ml-1">(18)</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xl font-bold">56 490 ₽</span>
-                                <span class="text-sm text-gray-500 line-through ml-2">66 490 ₽</span>
-                            </div>
-                            <button class="add-to-cart w-full mt-4 bg-black text-white py-2 rounded hover:bg-gray-800">Добавить в корзину</button>
-                        </div>
-                    </div>
-
-                    <!-- Product 4 -->
-                    <div class="product-card bg-gray-50 rounded-lg overflow-hidden shadow-md relative" data-product-id="4">
-                        <div class="relative">
-                            <img src="https://placehold.co/300x300?text=Посудомоечная+машина" alt="Встраиваемая посудомоечная машина Miele с сенсорным управлением" class="w-full h-64 object-contain p-4">
-                            <button class="heart-icon absolute top-2 left-2 text-gray-400 hover:text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold">Посудомоечная машина Miele G7360</h3>
-                            <div class="flex items-center mb-2">
-                                <div class="flex text-yellow-400">
-                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                                </div>
-                                <span class="text-sm text-gray-600 ml-1">(32)</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xl font-bold">134 990 ₽</span>
-                            </div>
-                            <button class="add-to-cart w-full mt-4 bg-black text-white py-2 rounded hover:bg-gray-800">Добавить в корзину</button>
-                        </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">Мы на карте</h3>
+                    <div class="bg-gray-800 rounded-lg p-4 h-64 flex items-center justify-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d21b6823-11c8-49f2-a520-ea871d240271.png" alt="Map location of DvrnTechStore in Bishkek, Kyrgyzstan" class="w-full h-full object-cover rounded">
                     </div>
                 </div>
             </div>
-        </section>
-
-        <!-- Discount Section -->
-        <section class="py-12 bg-gray-800 text-white">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold mb-8 text-center">Горячие предложения</h2>
-
-                <div class="carousel-container relative h-64 mb-8">
-                    <div class="carousel-track h-full">
-                        <div class="carousel-item active h-full" data-slide="1">
-                            <div class="flex flex-col md:flex-row items-center h-full">
-                                <div class="w-full md:w-1/2 h-full flex items-center justify-center p-6">
-                                    <img src="https://placehold.co/400x200?text=Специальное+предложение" alt="Специальное предложение на технику премиум класса с яркими акцентными цветами" class="rounded-lg shadow-lg">
-                                </div>
-                                <div class="w-full md:w-1/2 h-full flex flex-col justify-center p-6">
-                                    <h3 class="text-2xl font-bold mb-2">Скидка до 30% на технику Bosch</h3>
-                                    <p class="mb-4">Только до конца месяца специальное предложение на всю технику Bosch в нашем магазине.</p>
-                                    <button class="bg-white text-black px-6 py-2 rounded-full font-medium hover:bg-gray-200 transition duration-300 w-fit">Подробнее</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item h-full" data-slide="2">
-                            <div class="flex flex-col md:flex-row items-center h-full">
-                                <div class="w-full md:w-1/2 h-full flex items-center justify-center p-6">
-                                    <img src="https://placehold.co/400x200?text=Акция+на+ТВ" alt="Специальная акция на телевизоры с крупным изображением 4K экрана" class="rounded-lg shadow-lg">
-                                </div>
-                                <div class="w-full md:w-1/2 h-full flex flex-col justify-center p-6">
-                                    <h3 class="text-2xl font-bold mb-2">Телевизоры со скидкой 25%</h3>
-                                    <p class="mb-4">Лучшие модели телевизоров 2023 года по специальной цене. Ограниченное предложение.</p>
-                                    <button class="bg-white text-black px-6 py-2 rounded-full font-medium hover:bg-gray-200 transition duration-300 w-fit">Подробнее</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item h-full" data-slide="3">
-                            <div class="flex flex-col md:flex-row items-center h-full">
-                                <div class="w-full md:w-1/2 h-full flex items-center justify-center p-6">
-                                    <img src="https://placehold.co/400x200?text=Новинки+техники" alt="Новые модели кухонной техники с современным дизайном" class="rounded-lg shadow-lg">
-                                </div>
-                                <div class="w-full md:w-1/2 h-full flex flex-col justify-center p-6">
-                                    <h3 class="text-2xl font-bold mb-2">Новинки 2024 года уже в продаже</h3>
-                                    <p class="mb-4">Первыми получите новейшие модели техники от ведущих брендов.</p>
-                                    <button class="bg-white text-black px-6 py-2 rounded-full font-medium hover:bg-gray-200 transition duration-300 w-fit">Подробнее</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-center space-x-2">
-                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-400" data-slide="0"></button>
-                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-400" data-slide="1"></button>
-                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-400" data-slide="2"></button>
-                </div>
-            </div>
-        </section>
-
-        <!-- New Arrivals -->
-        <section class="py-12 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-3xl font-bold">Новинки</h2>
-                    <a href="#" class="text-gray-600 hover:text-black" data-tab="new">Все новинки →</a>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Product 5 -->
-                    <div class="product-card bg-gray-50 rounded-lg overflow-hidden shadow-md relative" data-product-id="5">
-                        <div class="relative">
-                            <img src="https://placehold.co/300x300?text=Робот+пылесос" alt="Современный робот-пылесос с лазерной навигацией и квадратной формой для уборки углов" class="w-full h-64 object-contain p-4">
-                            <button class="heart-icon absolute top-2 left-2 text-gray-400 hover:text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold">Робот-пылесос iRobot j7+</h3>
-                            <div class="flex items-center mb-2">
-                                <div class="flex text-yellow-400">
-                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                                </div>
-                                <span class="text-sm text-gray-600 ml-1">(31)</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xl font-bold">89 990 ₽</span>
-                            </div>
-                            <button class="add-to-cart w-full mt-4 bg-black text-white py-2 rounded hover:bg-gray-800">Добавить в корзину</button>
-                        </div>
-                    </div>
-
-                    <!-- Product 6 -->
-                    <div class="product-card bg-gray-50 rounded-lg overflow-hidden shadow-md relative" data-product-id="6">
-                        <div class="discount-badge">-10%</div>
-                        <div class="relative">
-                            <img src="https://placehold.co/300x300?text=Умный+кондиционер" alt="Современный умный кондиционер с Wi-Fi управлением и голосовым помощником" class="w-full h-64 object-contain p-4">
-                            <button class="heart-icon absolute top-2 left-2 text-gray-400 hover:text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold">Кондиционер Daikin Sensira</h3>
-                            <div class="flex items-center mb-2">
-                                <div class="flex text-yellow-400">
-                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span>
-                                </div>
-                                <span class="text-sm text-gray-600 ml-1">(12)</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xl font-bold">74 990 ₽</span>
-                                <span class="text-sm text-gray-500 line-through ml-2">83 990 ₽</span>
-                            </div>
-                            <button class="add-to-cart w-full mt-4 bg-black text-white py-2 rounded hover:bg-gray-800">Добавить в корзину</button>
-                        </div>
-                    </div>
-
-                    <!-- Product 7 -->
-                    <div class="product-card bg-gray-50 rounded-lg overflow-hidden shadow-md relative" data-product-id="7">
-                        <div class="relative">
-                            <img src="https://placehold.co/300x300?text=Кофемашина" alt="Автоматическая кофемашина с сенсорным экраном и встроенным кофемолкой" class="w-full h-64 object-contain p-4">
-                            <button class="heart-icon absolute top-2 left-2 text-gray-400 hover:text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold">Кофемашина DeLonghi PrimaDonna</h3>
-                            <div class="flex items-center mb-2">
-                                <div class="flex text-yellow-400">
-                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                                </div>
-                                <span class="text-sm text-gray-600 ml-1">(27)</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xl font-bold">149 990 ₽</span>
-                            </div>
-                            <button class="add-to-cart w-full mt-4 bg-black text-white py-2 rounded hover:bg-gray-800">Добавить в корзину</button>
-                        </div>
-                    </div>
-
-                    <!-- Product 8 -->
-                    <div class="product-card bg-gray-50 rounded-lg overflow-hidden shadow-md relative" data-product-id="8">
-                        <div class="discount-badge">-15%</div>
-                        <div class="relative">
-                            <img src="https://placehold.co/300x300?text=Игровая+приставка" alt="Новейшая игровая консоль с дисководом и двумя беспроводными контроллерами" class="w-full h-64 object-contain p-4">
-                            <button class="heart-icon absolute top-2 left-2 text-gray-400 hover:text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold">Игровая приставка Sony PlayStation 5</h3>
-                            <div class="flex items-center mb-2">
-                                <div class="flex text-yellow-400">
-                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                                </div>
-                                <span class="text-sm text-gray-600 ml-1">(89)</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xl font-bold">74 990 ₽</span>
-                                <span class="text-sm text-gray-500 line-through ml-2">87 990 ₽</span>
-                            </div>
-                            <button class="add-to-cart w-full mt-4 bg-black text-white py-2 rounded hover:bg-gray-800">Добавить в корзину</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Testimonials Carousel -->
-        <section class="py-12 bg-gray-100">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold mb-8 text-center">Отзывы покупателей</h2>
-
-                <div class="carousel-container relative h-64 mb-8">
-                    <div class="carousel-track h-full">
-                        <div class="carousel-item active h-full" data-slide="4">
-                            <div class="flex flex-col items-center justify-center h-full p-6 max-w-3xl mx-auto">
-                                <div class="bg-white rounded-lg shadow-md p-6 text-center">
-                                    <div class="flex justify-center mb-4">
-                                        <div class="flex text-yellow-400">
-                                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-lg mb-4">"Отличный магазин, быстрая доставка. Холодильник Samsung приехал точно в оговоренные сроки, работает идеально. Обязательно вернусь за новой покупкой!"</p>
-                                    <p class="font-semibold">— Иван Петров, Москва</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item h-full" data-slide="5">
-                            <div class="flex flex-col items-center justify-center h-full p-6 max-w-3xl mx-auto">
-                                <div class="bg-white rounded-lg shadow-md p-6 text-center">
-                                    <div class="flex justify-center mb-4">
-                                        <div class="flex text-yellow-400">
-                                            <span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-lg mb-4">"Заказывали телевизор LG OLED для гостиной. Очень довольны качеством изображения. Единственное - пришлось немного подождать доставку, но это стоило того."</p>
-                                    <p class="font-semibold">— Елена Смирнова, Санкт-Петербург</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item h-full" data-slide="6">
-                            <div class="flex flex-col items-center justify-center h-full p-6 max-w-3xl mx-auto">
-                                <div class="bg-white rounded-lg shadow-md p-6 text-center">
-                                    <div class="flex justify-center mb-4">
-                                        <div class="flex text-yellow-400">
-                                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-lg mb-4">"Лучший сервис! Помогли с выбором стиральной машины, установили в тот же день. Прошло уже полгода - никаких нареканий, всё прекрасно работает."</p>
-                                    <p class="font-semibold">— Алексей Козлов, Екатеринбург</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-center space-x-2">
-                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-400" data-slide="3"></button>
-                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-400" data-slide="4"></button>
-                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-400" data-slide="5"></button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Newsletter Section -->
-        <section class="py-12 bg-black text-white">
-            <div class="container mx-auto px-6">
-                <div class="max-w-4xl mx-auto text-center">
-                    <h2 class="text-3xl font-bold mb-4">Подпишитесь на рассылку</h2>
-                    <p class="text-xl text-gray-300 mb-8">Получайте первыми информацию о новых поступлениях, специальных предложениях и эксклюзивных скидках</p>
-                    <form class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
-                        <input type="email" placeholder="Ваш email" class="flex-1 bg-gray-800 text-white px-4 py-3 rounded focus:outline-none focus:ring-2 focus:ring-gray-500">
-                        <button type="submit" class="bg-white text-black px-6 py-3 rounded font-bold hover:bg-gray-200 transition duration-300">Подписаться</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer class="bg-black py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-white text-lg font-semibold mb-4">TechStore</h3>
-                    <p class="mb-4">Лучшая техника для вашего дома по доступным ценам.</p>
+                    <h4 class="text-xl font-bold gradient-text mb-4">DvrnTechStore</h4>
+                    <p class="text-gray-400">Лучший выбор техники в Кыргызстане</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Каталог</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-red-500">Ноутбуки</a></li>
+                        <li><a href="#" class="hover:text-red-500">Планшеты</a></li>
+                        <li><a href="#" class="hover:text-red-500">Аксессуары</a></li>
+                        <li><a href="#" class="hover:text-red-500">Телевизоры</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Помощь</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-red-500">Доставка</a></li>
+                        <li><a href="#" class="hover:text-red-500">Оплата</a></li>
+                        <li><a href="#" class="hover:text-red-500">Гарантия</a></li>
+                        <li><a href="#" class="hover:text-red-500">Возврат</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Соцсети</h4>
                     <div class="flex space-x-4">
-                        <a href="#"><img src="https://placehold.co/40x40?text=VK" alt="Иконка ВКонтакте - синий квадрат с белой буквой V и K" class="w-10 h-10"></a>
-                        <a href="#"><img src="https://placehold.co/40x40?text=TG" alt="Иконка Telegram - синий круг с белым бумажным самолетиком" class="w-10 h-10"></a>
-                        <a href="#"><img src="https://placehold.co/40x40?text=YT" alt="Иконка YouTube - красный прямоугольник с белым треугольником" class="w-10 h-10"></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
                     </div>
                 </div>
-
-                <div>
-                    <h3 class="text-white text-lg font-semibold mb-4">Каталог</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="hover:text-white" data-tab="refrigerators">Холодильники</a></li>
-                        <li><a href="#" class="hover:text-white" data-tab="tvs">Телевизоры</a></li>
-                        <li><a href="#" class="hover:text-white" data-tab="washing-machines">Стиральные машины</a></li>
-                        <li><a href="#" class="hover:text-white" data-tab="kitchen">Кухонная техника</a></li>
-                        <li><a href="#" class="hover:text-white" data-tab="climate">Климатическая техника</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="text-white text-lg font-semibold mb-4">Компания</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="hover:text-white">О нас</a></li>
-                        <li><a href="#" class="hover:text-white">Контакты</a></li>
-                        <li><a href="#" class="hover:text-white">Доставка и оплата</a></li>
-                        <li><a href="#" class="hover:text-white">Гарантия</a></li>
-                        <li><a href="#" class="hover:text-white">Политика конфиденциальности</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="text-white text-lg font-semibold mb-4">Контакты</h3>
-                    <address class="not-italic">
-                        <p class="mb-2">г. Москва, ул. Техническая, д. 15</p>
-                        <p class="mb-2">Пн-Пт: 9:00 - 21:00</p>
-                        <p class="mb-2">Сб-Вс: 10:00 - 20:00</p>
-                        <p class="mb-2">Телефон: <a href="tel:+74951234567" class="hover:text-white">+7 (495) 123-45-67</a></p>
-                        <p>Email: <a href="mailto:info@techstore.ru" class="hover:text-white">info@techstore.ru</a></p>
-                    </address>
-                </div>
             </div>
-
-            <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p>© 2023 TechStore. Все права защищены.</p>
-                <div class="flex space-x-4 mt-4 md:mt-0">
-                    <img src="https://placehold.co/60x40?text=VISA" alt="Логотип Visa - синяя карта с белыми буквами VISA" class="h-10">
-                    <img src="https://placehold.co/60x40?text=MC" alt="Логотип Mastercard - два соединенных круга красный и желтый с белыми буквами MC" class="h-10">
-                    <img src="https://placehold.co/60x40?text=MIR" alt="Логотип Мир - сине-зеленая карта с белыми буквами МИР" class="h-10">
-                </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>© 2024 DvrnTechStore. Все права защищены.</p>
             </div>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Login Modal
-            const accountBtn = document.getElementById('account-btn');
-            const accountModal = document.getElementById('account-modal');
-            const closeModal = document.getElementById('close-modal');
-            const showRegister = document.getElementById('show-register');
-            const showLogin = document.getElementById('show-login');
-            const loginForm = document.getElementById('login-form');
-            const registerForm = document.getElementById('register-form');
+            // Add to cart functionality
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.classList.add('added');
+                    this.textContent = 'Добавлено!';
 
-            // Cart Modal
-            const cartBtn = document.getElementById('cart-btn');
-            const cartModal = document.getElementById('cart-modal');
-            const closeCartModal = document.getElementById('close-cart-modal');
+                    // Update cart badge
+                    const cartBadge = document.querySelector('.cart-badge');
+                    let count = parseInt(cartBadge.textContent);
+                    cartBadge.textContent = count + 1;
 
-            // Favorites Modal
-            const favoriteBtn = document.getElementById('favorite-btn');
-            const favoritesModal = document.getElementById('favorites-modal');
-            const closeFavoritesModal = document.getElementById('close-favorites-modal');
+                    setTimeout(() => {
+                        this.classList.remove('added');
+                        this.textContent = 'В корзину';
+                    }, 2000);
+                });
+            });
 
-            // Product Modal
-            const closeProductModal = document.getElementById('close-product-modal');
+            // Category buttons
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
 
-            // Mobile Menu
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            // Carousel
+            // Carousel functionality
             const carouselTrack = document.querySelector('.carousel-track');
             const carouselItems = document.querySelectorAll('.carousel-item');
-            const dots = document.querySelectorAll('.carousel-dot');
-            let currentIndex = 0;
+            const prevBtn = document.querySelector('.carousel-prev');
+            const nextBtn = document.querySelector('.carousel-next');
 
-            // Product Data
-            const products = [
-                {
-                    id: 1,
-                    title: "Холодильник Samsung RS68A8841SL",
-                    price: "89 990",
-                    oldPrice: "112 490",
-                    image: "https://placehold.co/600x600?text=Samsung+Fridge",
-                    description: "Холодильник Side by Side с цифровым дисплеем и технологией No Frost. Общий объем 635 литров (холодильная камера 406 л, морозильная камера 229 л). Инверторный компрессор, класс энергопотребления A++.",
-                    specs: {
-                        brand: "Samsung",
-                        model: "RS68A8841SL",
-                        color: "Металлик",
-                        warranty: "24 месяца"
-                    },
-                    discount: "20%"
-                },
-                {
-                    id: 2,
-                    title: "Телевизор LG OLED55C3 55\"",
-                    price: "124 990",
-                    oldPrice: "",
-                    image: "https://placehold.co/600x600?text=LG+OLED",
-                    description: "OLED телевизор с разрешением 4K (3840x2160), технологией AI ThinQ, процессором α9 Gen6 AI. Поддержка HDR10, Dolby Vision, Dolby Atmos. Частота обновления 120 Гц.",
-                    specs: {
-                        brand: "LG",
-                        model: "OLED55C3",
-                        color: "Черный",
-                        warranty: "24 месяца"
-                    }
-                },
-                {
-                    id: 3,
-                    title: "Духовой шкаф Bosch HMT85",
-                    price: "56 490",
-                    oldPrice: "66 490",
-                    image: "https://placehold.co/600x600?text=Bosch+Oven",
-                    description: "Встраиваемый духовой шкаф с функциями конвекции, гриля и пиролитической очистки. Объем 71 литр, 11 программ готовки, класс энергопотребления A+.",
-                    specs: {
-                        brand: "Bosch",
-                        model: "HMT85",
-                        color: "Нержавеющая сталь",
-                        warranty: "24 месяца"
-                    },
-                    discount: "15%"
-                },
-                {
-                    id: 4,
-                    title: "Посудомоечная машина Miele G7360",
-                    price: "134 990",
-                    oldPrice: "",
-                    image: "https://placehold.co/600x600?text=Miele+Dishwasher",
-                    description: "Полноразмерная встраиваемая посудомоечная машина с сенсорным управлением и технологией AutoDos. Вместимость 14 комплектов посуды, уровень шума 42 дБ.",
-                    specs: {
-                        brand: "Miele",
-                        model: "G7360",
-                        color: "Белый",
-                        warranty: "24 месяца"
-                    }
+            let currentPosition = 0;
+            const itemWidth = carouselItems[0].offsetWidth + 24; // width + gap
+
+            nextBtn.addEventListener('click', () => {
+                if (currentPosition > -((carouselItems.length - 4) * itemWidth)) {
+                    currentPosition -= itemWidth;
+                    carouselTrack.style.transform = `translateX(${currentPosition}px)`;
                 }
-            ];
-
-            // Cart data
-            let cart = [];
-            let favorites = [];
-
-            // Event Listeners
-            accountBtn.addEventListener('click', () => {
-                accountModal.classList.remove('hidden');
             });
 
-            closeModal.addEventListener('click', () => {
-                accountModal.classList.add('hidden');
+            prevBtn.addEventListener('click', () => {
+                if (currentPosition < 0) {
+                    currentPosition += itemWidth;
+                    carouselTrack.style.transform = `translateX(${currentPosition}px)`;
+                }
             });
 
-            showRegister.addEventListener('click', () => {
-                loginForm.classList.add('hidden');
-                registerForm.classList.remove('hidden');
-            });
-
-            showLogin.addEventListener('click', () => {
-                registerForm.classList.add('hidden');
-                loginForm.classList.remove('hidden');
-            });
-
-            cartBtn.addEventListener('click', () => {
-                updateCartModal();
-                cartModal.classList.remove('hidden');
-            });
-
-            closeCartModal.addEventListener('click', () => {
-                cartModal.classList.add('hidden');
-            });
-
-            favoriteBtn.addEventListener('click', () => {
-                updateFavoritesModal();
-                favoritesModal.classList.remove('hidden');
-            });
-
-            closeFavoritesModal.addEventListener('click', () => {
-                favoritesModal.classList.add('hidden');
-            });
-
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-
-            closeProductModal.addEventListener('click', () => {
-                document.getElementById('product-modal').classList.add('hidden');
-            });
-
-            // Tab switching
-            document.querySelectorAll('[data-tab]').forEach(tab => {
-                tab.addEventListener('click', (e) => {
+            // Smooth scrolling for navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-
-                    // Update active tab
-                    document.querySelectorAll('[data-tab]').forEach(t => {
-                        t.classList.remove('active-tab');
-                    });
-                    tab.classList.add('active-tab');
-
-                    // Here you would normally load the tab content
-                    // For this example, we'll just scroll to the section
-                    const tabId = tab.getAttribute('data-tab');
-                    if (tabId === 'home') {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    } else if (document.getElementById(tabId)) {
-                        document.getElementById(tabId).scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
-            });
-
-            // Category clicks
-            document.querySelectorAll('[data-category]').forEach(category => {
-                category.addEventListener('click', () => {
-                    // Here you would filter products by category
-                    const categoryName = category.getAttribute('data-category');
-                    document.querySelector('[data-tab="catalog"]').click();
-                    // In a real app, you would load products for this category
-                });
-            });
-
-            // Add to cart buttons
-            document.querySelectorAll('.add-to-cart').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const productCard = this.closest('.product-card');
-                    const productId = productCard.getAttribute('data-product-id');
-                    const product = products.find(p => p.id == productId);
-
-                    // Check if product already in cart
-                    const existingItem = cart.find(item => item.id == productId);
-
-                    if (existingItem) {
-                        existingItem.quantity += 1;
-                    } else {
-                        cart.push({
-                            id: product.id,
-                            title: product.title,
-                            price: product.price,
-                            image: product.image,
-                            quantity: 1
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
                         });
                     }
-
-                    // Update cart counter
-                    updateCartCounter();
-
-                    // Show success message
-                    alert(`${product.title} добавлен в корзину`);
                 });
             });
-
-            // Heart icons (add to favorites)
-            document.querySelectorAll('.heart-icon').forEach(heart => {
-                heart.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const productCard = this.closest('.product-card');
-                    const productId = productCard.getAttribute('data-product-id');
-                    const product = products.find(p => p.id == productId);
-
-                    // Check if already in favorites
-                    const isFavorite = favorites.some(f => f.id == productId);
-
-                    if (isFavorite) {
-                        // Remove from favorites
-                        favorites = favorites.filter(f => f.id != productId);
-                        this.classList.remove('text-red-500');
-                        this.classList.add('text-gray-400');
-                    } else {
-                        // Add to favorites
-                        favorites.push({
-                            id: product.id,
-                            title: product.title,
-                            price: product.price,
-                            image: product.image
-                        });
-                        this.classList.remove('text-gray-400');
-                        this.classList.add('text-red-500');
-                    }
-
-                    // Update favorites counter
-                    updateFavoritesCounter();
-                });
-            });
-
-            // Product card clicks (open product details)
-            document.querySelectorAll('.product-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const productId = this.getAttribute('data-product-id');
-                    const product = products.find(p => p.id == productId);
-
-                    // Update modal with product details
-                    document.getElementById('product-modal-title').textContent = product.title;
-                    document.getElementById('product-modal-image').src = product.image;
-                    document.getElementById('product-modal-image').alt = product.title;
-                    document.getElementById('product-modal-price').textContent = `${product.price} ₽`;
-                    document.getElementById('product-modal-description').textContent = product.description;
-
-                    if (product.oldPrice) {
-                        document.getElementById('product-modal-old-price').textContent = `${product.oldPrice} ₽`;
-                        document.getElementById('product-modal-old-price').classList.remove('hidden');
-                    } else {
-                        document.getElementById('product-modal-old-price').classList.add('hidden');
-                    }
-
-                    // Check if in favorites to set heart color
-                    const isFavorite = favorites.some(f => f.id == productId);
-                    const favoriteBtn = document.getElementById('add-to-favorites-modal-btn');
-
-                    if (isFavorite) {
-                        favoriteBtn.classList.add('text-red-500');
-                        favoriteBtn.classList.remove('text-gray-400');
-                    } else {
-                        favoriteBtn.classList.add('text-gray-400');
-                        favoriteBtn.classList.remove('text-red-500');
-                    }
-
-                    // Show modal
-                    document.getElementById('product-modal').classList.remove('hidden');
-                });
-            });
-
-            // Carousel navigation
-            dots.forEach(dot => {
-                dot.addEventListener('click', function() {
-                    const slideIndex = parseInt(this.getAttribute('data-slide'));
-                    goToSlide(slideIndex);
-                });
-            });
-
-            // Automatic carousel rotation
-            let carouselInterval = setInterval(nextSlide, 5000);
-
-            function updateCartCounter() {
-                const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-                document.querySelector('.cart-counter').textContent = totalItems;
-            }
-
-            function updateFavoritesCounter() {
-                document.querySelector('.favorite-counter').textContent = favorites.length;
-            }
-
-            function updateCartModal() {
-                const cartItemsContainer = document.getElementById('cart-items');
-                const cartTotal = document.getElementById('cart-total');
-
-                if (cart.length === 0) {
-                    cartItemsContainer.innerHTML = '<p class="text-gray-400 text-center py-4">Ваша корзина пуста</p>';
-                    cartTotal.textContent = '0 ₽';
-                    return;
-                }
-
-                let itemsHTML = '';
-                let total = 0;
-
-                cart.forEach(item => {
-                    const itemTotal = parseInt(item.price.replace(/\s/g, '')) * item.quantity;
-                    total += itemTotal;
-
-                    itemsHTML += `
-                        <div class="flex items-center py-4 border-b border-gray-700">
-                            <img src="${item.image}" alt="${item.title}" class="w-16 h-16 object-contain rounded mr-4">
-                            <div class="flex-1">
-                                <h4 class="font-medium text-white">${item.title}</h4>
-                                <div class="flex items-center mt-2">
-                                    <button class="quantity-btn px-2 py-1 bg-gray-700 rounded" data-id="${item.id}" data-action="decrease">-</button>
-                                    <span class="mx-2 text-white">${item.quantity}</span>
-                                    <button class="quantity-btn px-2 py-1 bg-gray-700 rounded" data-id="${item.id}" data-action="increase">+</button>
-                                    <span class="ml-auto font-bold text-white">${item.price} ₽</span>
-                                </div>
-                            </div>
-                            <button class="ml-4 text-gray-400 hover:text-red-500 remove-btn" data-id="${item.id}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                        </div>
-                    `;
-                });
-
-                cartItemsContainer.innerHTML = itemsHTML;
-                cartTotal.textContent = `${total.toLocaleString('ru-RU')} ₽`;
-
-                // Add event listeners to quantity buttons
-                document.querySelectorAll('.quantity-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const productId = this.getAttribute('data-id');
-                        const action = this.getAttribute('data-action');
-                        const item = cart.find(i => i.id == productId);
-
-                        if (action === 'increase') {
-                            item.quantity += 1;
-                        } else if (action === 'decrease' && item.quantity > 1) {
-                            item.quantity -= 1;
-                        }
-
-                        updateCartModal();
-                        updateCartCounter();
-                    });
-                });
-
-                // Add event listeners to remove buttons
-                document.querySelectorAll('.remove-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const productId = this.getAttribute('data-id');
-                        cart = cart.filter(i => i.id != productId);
-                        updateCartModal();
-                        updateCartCounter();
-                    });
-                });
-            }
-
-            function updateFavoritesModal() {
-                const favoritesContainer = document.getElementById('favorites-items');
-
-                if (favorites.length === 0) {
-                    favoritesContainer.innerHTML = '<p class="text-gray-400 text-center py-4 col-span-2">У вас пока нет избранных товаров</p>';
-                    return;
-                }
-
-                let itemsHTML = '';
-
-                favorites.forEach(item => {
-                    itemsHTML += `
-                        <div class="flex items-center bg-gray-700 rounded-lg p-4" data-id="${item.id}">
-                            <img src="${item.image}" alt="${item.title}" class="w-20 h-20 object-contain rounded mr-4">
-                            <div class="flex-1">
-                                <h4 class="font-medium text-white">${item.title}</h4>
-                                <p class="text-gray-300 mt-1">${item.price} ₽</p>
-                            </div>
-                            <button class="text-red-500 hover:text-red-400 remove-favorite-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                        </div>
-                    `;
-                });
-
-                favoritesContainer.innerHTML = itemsHTML;
-
-                // Add event listeners to remove buttons
-                document.querySelectorAll('.remove-favorite-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const productId = this.closest('[data-id]').getAttribute('data-id');
-                        favorites = favorites.filter(f => f.id != productId);
-                        updateFavoritesModal();
-                        updateFavoritesCounter();
-
-                        // Also update heart icons in product cards
-                        document.querySelectorAll(`.product-card[data-product-id="${productId}"] .heart-icon`).forEach(heart => {
-                            heart.classList.remove('text-red-500');
-                            heart.classList.add('text-gray-400');
-                        });
-                    });
-                });
-            }
-
-            function nextSlide() {
-                currentIndex = (currentIndex + 1) % carouselItems.length;
-                updateCarousel();
-            }
-
-            function goToSlide(index) {
-                currentIndex = index;
-                updateCarousel();
-
-                // Reset interval when manually changing slides
-                clearInterval(carouselInterval);
-                carouselInterval = setInterval(nextSlide, 5000);
-            }
-
-            function updateCarousel() {
-                // Update carousel track position
-                carouselTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
-
-                // Update dots
-                dots.forEach((dot, index) => {
-                    if (index === currentIndex) {
-                        dot.classList.add('bg-gray-200');
-                        dot.classList.remove('bg-gray-400');
-                    } else {
-                        dot.classList.add('bg-gray-400');
-                        dot.classList.remove('bg-gray-200');
-                    }
-                });
-            }
-
-            // Initialize counters
-            updateCartCounter();
-            updateFavoritesCounter();
         });
     </script>
 </body>
 </html>
+

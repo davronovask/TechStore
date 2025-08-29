@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Детальная страница товара — DvrnTechStore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #ff3b3b, #ff6b6b, #ff3b3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .product-card {
+            background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #333;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .spec-item {
+            border-bottom: 1px solid #333;
+            padding: 12px 0;
+        }
+        .spec-item:last-child {
+            border-bottom: none;
+        }
+        .add-to-cart {
+            transition: all 0.3s ease;
+        }
+        .add-to-cart.added {
+            background: #00ff00 !important;
+            color: #000 !important;
+        }
+        .quantity-btn {
+            transition: all 0.3s ease;
+        }
+        .quantity-btn:hover {
+            background: #ff3b3b !important;
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 9999;
+            opacity: 0.95;
+            animation: fadeinout 2s forwards;
+        }
+        .toast-success {
+            background-color: #22c55e;
+        }
+        .toast-error {
+            background-color: #ef4444;
+        }
+        @keyframes fadeinout {
+            0% {opacity: 0; transform: translateY(-10px);}
+            10%, 90% {opacity: 0.95; transform: translateY(0);}
+            100% {opacity: 0; transform: translateY(-10px);}
+        }
+        .image-gallery {
+            position: relative;
+        }
+        .thumbnails {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            overflow-x: auto;
+        }
+        .thumbnail {
+            width: 80px;
+            height: 60px;
+            object-fit: cover;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: #ff3b3b;
+        }
+    </style>
+</head>
+<body>
+    <header class="fixed top-0 w-full bg-black bg-opacity-90 z-50 shadow-md">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">D</span>
+                </div>
+                <h1 class="text-2xl font-bold gradient-text">DvrnTechStore</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-white">
+                <a href="index.html" class="hover:text-red-500">Главная</a>
+                <a href="catalog.html" class="hover:text-red-500">Каталог</a>
+                <a href="cart.html" class="hover:text-red-500">Корзина</a>
+                <a href="favorites.html" class="hover:text-red-500">Избранное</a>
+                <a href="login.html" class="hover:text-red-500">Вход</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 pt-28 pb-16 min-h-screen">
+        <!-- Хлебные крошки -->
+        <nav class="text-sm text-gray-400 mb-8">
+            <a href="index.html" class="hover:text-red-500">Главная</a>
+            <span class="mx-2">/</span>
+            <a href="catalog.html" class="hover:text-red-500">Каталог</a>
+            <span class="mx-2">/</span>
+            <a href="catalog.html?category=laptops" class="hover:text-red-500">Ноутбуки</a>
+            <span class="mx-2">/</span>
+            <span class="text-white">Gaming Laptop Pro</span>
+        </nav>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Галерея изображений -->
+            <div class="image-gallery">
+                <img id="mainImage" src="https://placehold.co/600x400" alt="Gaming Laptop Pro" class="w-full h-96 object-cover rounded-2xl mb-4" />
+                <div class="thumbnails">
+                    <img src="https://placehold.co/600x400" alt="Gaming Laptop Pro - вид 1" class="thumbnail active" onclick="changeImage(this, 'https://placehold.co/600x400')" />
+                    <img src="https://placehold.co/600x400" alt="Gaming Laptop Pro - вид 2" class="thumbnail" onclick="changeImage(this, 'https://placehold.co/600x400')" />
+                    <img src="https://placehold.co/600x400" alt="Gaming Laptop Pro - вид 3" class="thumbnail" onclick="changeImage(this, 'https://placehold.co/600x400')" />
+                    <img src="https://placehold.co/600x400" alt="Gaming Laptop Pro - вид 4" class="thumbnail" onclick="changeImage(this, 'https://placehold.co/600x400')" />
+                </div>
+            </div>
+
+            <!-- Информация о товаре -->
+            <div>
+                <div class="mb-6">
+                    <span class="bg-red-600 text-white text-sm px-3 py-1 rounded-full">NEW</span>
+                    <span class="ml-3 text-green-500 text-sm">
+                        <i class="fas fa-check-circle mr-1"></i>В наличии
+                    </span>
+                </div>
+
+                <h1 class="text-4xl font-bold mb-4">Gaming Laptop Pro</h1>
+                <p class="text-gray-400 text-lg mb-6">Мощный игровой ноутбук с RTX 4060 для профессиональных геймеров</p>
+
+                <div class="flex items-center mb-6">
+                    <div class="text-3xl font-bold text-red-500 mr-4">89 999 сом</div>
+                    <div class="text-gray-400 line-through text-xl">99 999 сом</div>
+                </div>
+
+                <!-- Убрали блок со звездами и отзывами -->
+
+                <div class="flex space-x-4 mb-8">
+                    <button class="add-to-cart flex-1 bg-red-600 hover:bg-red-700 text-white py-4 rounded-lg font-semibold text-lg">
+                        <i class="fas fa-shopping-cart mr-2"></i>В корзину
+                    </button>
+                    <button class="w-14 h-14 bg-gray-800 hover:bg-red-600 text-white rounded-lg border border-gray-700">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </div>
+
+                <!-- Краткие характеристики -->
+                <div class="product-card rounded-xl p-6 mb-8">
+                    <h3 class="text-xl font-semibold mb-4">Ключевые характеристики</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-gray-400">Процессор:</span>
+                            <span class="text-white">Intel Core i7-12700H</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400">Видеокарта:</span>
+                            <span class="text-white">NVIDIA RTX 4060 8GB</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400">Оперативная память:</span>
+                            <span class="text-white">16GB DDR5</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400">Накопитель:</span>
+                            <span class="text-white">1TB SSD NVMe</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400">Экран:</span>
+                            <span class="text-white">15.6" IPS 144Hz</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400">Вес:</span>
+                            <span class="text-white">2.3 кг</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Детальное описание и характеристики -->
+        <div class="mt-16">
+            <div class="border-b border-gray-700 mb-8">
+                <button class="tab-btn active py-4 px-6 border-b-2 border-red-500 text-white font-semibold" onclick="showTab('description')">
+                    Описание
+                </button>
+                <button class="tab-btn py-4 px-6 text-gray-400 hover:text-white" onclick="showTab('specs')">
+                    Характеристики
+                </button>
+                <!-- Убрали кнопку "Отзывы" -->
+            </div>
+
+            <div id="descriptionTab" class="tab-content">
+                <div class="prose prose-invert max-w-none">
+                    <h3>Мощь для победы в каждой игре</h3>
+                    <p>Gaming Laptop Pro — это идеальный спутник для геймеров, которые ценят производительность и мобильность. Оснащенный новейшим процессором Intel Core i7 и видеокартой NVIDIA RTX 4060, этот ноутбук обеспечивает плавный геймплей даже в самых требовательных играх.</p>
+
+                    <h3>Ключевые преимущества:</h3>
+                    <ul>
+                        <li>Высокая производительность в играх и приложениях</li>
+                        <li>Яркий IPS-экран с частотой 144 Гц</li>
+                        <li>Быстрая SSD-память для мгновенной загрузки</li>
+                        <li>Современная система охлаждения</li>
+                        <li>Стильный дизайн с RGB-подсветкой</li>
+                    </ul>
+
+                    <h3>Технологии будущего уже сегодня</h3>
+                    <p>Благодаря технологии DLSS 3.0 и трассировке лучей вы сможете наслаждаться невероятной графикой с максимальным уровнем детализации. А благодаря поддержке Wi-Fi 6E вы всегда будете оставаться на связи с минимальной задержкой.</p>
+                </div>
+            </div>
+
+            <div id="specsTab" class="tab-content hidden">
+                <div class="product-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-6">Полные технические характеристики</h3>
+                    <div class="space-y-4">
+                        <div class="spec-item">
+                            <span class="text-gray-400 font-semibold">Процессор</span>
+                            <span class="text-white">Intel Core i7-12700H (14 ядер, до 4.7 GHz)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="text-gray-400 font-semibold">Видеокарта</span>
+                            <span class="text-white">NVIDIA GeForce RTX 4060 8GB GDDR6</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="text-gray-400 font-semibold">Оперативная память</span>
+                            <span class="text-white">16GB DDR5 4800MHz (2x8GB)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="text-gray-400 font-semibold">Накопитель</span>
+                            <span class="text-white">1TB NVMe PCIe 4.0 SSD</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="text-gray-400 font-semibold">Экран</span>
+                            <span class="text-white">15.6" IPS, 2560x1440, 144Hz, 100% sRGB</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="text-gray-400 font-semibold">Батарея</span>
+                            <span class="text-white">4-секционная литий-ионная, 80Wh</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="text-gray-400 font-semibold">Порты</span>
+                            <span class="text-white">USB-C Thunderbolt 4, USB 3.2, HDMI 2.1, Ethernet</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="text-gray-400 font-semibold">ОС</span>
+                            <span class="text-white">Windows 11 Home</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="text-gray-400 font-semibold">Габариты</span>
+                            <span class="text-white">360 x 260 x 23 мм</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="text-gray-400 font-semibold">Вес</span>
+                            <span class="text-white">2.3 кг</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Убрали блок с отзывами -->
+        </div>
+    </main>
+
+    <footer class="bg-black py-12">
+        <div class="container mx-auto px-4 text-center text-gray-400">
+            © 2024 DvrnTechStore. Все права защищены.
+        </div>
+    </footer>
+
+    <script>
+        function changeImage(thumbnail, newSrc) {
+            document.getElementById('mainImage').src = newSrc;
+            document.querySelectorAll('.thumbnail').forEach(img => img.classList.remove('active'));
+            thumbnail.classList.add('active');
+        }
+
+        function updateQuantity(change) {
+            const input = document.getElementById('quantity');
+            let value = parseInt(input.value) + change;
+            value = Math.max(1, Math.min(10, value));
+            input.value = value;
+        }
+
+        function showTab(tabName) {
+            // Скрываем все табы
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'border-red-500', 'text-white');
+                btn.classList.add('text-gray-400');
+            });
+
+            // Показываем выбранный таб
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            document.querySelector(`.tab-btn[onclick="showTab('${tabName}')"]`).classList.add('active', 'border-red-500', 'text-white');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 2000);
+        }
+
+        // Обработчики событий
+        document.addEventListener('DOMContentLoaded', () => {
+            const addToCartBtn = document.querySelector('.add-to-cart');
+            const favoriteBtn = document.querySelector('.w-14.h-14');
+
+            addToCartBtn.addEventListener('click', () => {
+                const quantity = document.getElementById('quantity').value;
+                addToCartBtn.classList.add('added');
+                addToCartBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Добавлено';
+                showToast('Товар добавлен в корзину', 'success');
+
+                setTimeout(() => {
+                    addToCartBtn.classList.remove('added');
+                    addToCartBtn.innerHTML = '<i class="fas fa-shopping-cart mr-2"></i>В корзину';
+                }, 2000);
+            });
+
+            favoriteBtn.addEventListener('click', () => {
+                favoriteBtn.classList.toggle('text-red-500');
+                showToast(
+                    favoriteBtn.classList.contains('text-red-500')
+                    ? 'Добавлено в избранное'
+                    : 'Удалено из избранного',
+                    'success'
+                );
+            });
+        });
+    </script>
+</body>
+</html>
