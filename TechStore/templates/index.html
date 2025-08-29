@@ -19,10 +19,12 @@
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
             color: #ffffff;
             min-height: 100vh;
+            transition: all 0.3s ease;
         }
 
         .header-gradient {
             background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            transition: all 0.3s ease;
         }
 
         .product-card {
@@ -104,6 +106,161 @@
         .scroll-smooth {
             scroll-behavior: smooth;
         }
+
+        /* Кнопка избранного */
+        .favorite-btn {
+            transition: all 0.3s ease;
+        }
+
+        .favorite-btn.active {
+            background: #ff3b3b !important;
+            color: white !important;
+        }
+
+        .favorite-btn.active i {
+            color: white !important;
+        }
+
+        /* Светлая тема - ПОЛНОСТЬЮ ПЕРЕПИСАНА */
+        body.light-theme {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            color: #2d3748;
+        }
+
+        body.light-theme .header-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 50%, #ffffff 100%);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        body.light-theme .product-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #ff3b3b; /* Красная рамка */
+            box-shadow: 0 4px 25px rgba(255, 59, 59, 0.15);
+            color: #2d3748;
+        }
+
+        body.light-theme .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 35px rgba(255, 59, 59, 0.25);
+            border-color: #ff3b3b;
+        }
+
+        body.light-theme .neon-glow {
+            text-shadow: 0 0 4px rgba(255, 59, 59, 0.3), 0 0 8px rgba(255, 59, 59, 0.15);
+            color: #c53030; /* Менее яркий красный для лучшей читаемости */
+        }
+
+        body.light-theme .gradient-text {
+            background: linear-gradient(45deg, #d94a4a, #e06b6b, #d94a4a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.light-theme .section-border {
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        body.light-theme .btn-primary {
+            background: linear-gradient(45deg, #ff3b3b, #ff6b6b);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 59, 59, 0.3);
+        }
+
+        body.light-theme .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 59, 59, 0.4);
+        }
+
+        body.light-theme .category-btn.active {
+            border-color: #ff3b3b;
+            background: rgba(255, 59, 59, 0.1);
+        }
+
+        body.light-theme .cart-badge {
+            background-color: #ff3b3b;
+            color: white;
+        }
+
+        body.light-theme .text-gray-300 {
+            color: #718096 !important;
+        }
+
+        body.light-theme .text-gray-400 {
+            color: #a0aec0 !important;
+        }
+
+        body.light-theme .bg-black {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+        }
+
+        body.light-theme .bg-gray-900 {
+            background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 100%) !important;
+        }
+
+        body.light-theme .bg-gradient-to-b {
+            background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%) !important;
+        }
+
+        body.light-theme footer {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+            color: #2d3748;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        body.light-theme footer a {
+            color: #4a5568 !important;
+        }
+
+        body.light-theme footer a:hover {
+            color: #ff3b3b !important;
+        }
+
+        body.light-theme .header-gradient a,
+        body.light-theme .header-gradient button {
+            color: #2d3748 !important;
+        }
+
+        body.light-theme .header-gradient a:hover,
+        body.light-theme .header-gradient button:hover {
+            color: #ff3b3b !important;
+        }
+
+        body.light-theme .border-gray-600 {
+            border-color: #cbd5e0 !important;
+        }
+
+        body.light-theme .hover\:border-red-500:hover {
+            border-color: #ff3b3b !important;
+        }
+
+        body.light-theme .bg-gray-700 {
+            background-color: #cbd5e0 !important;
+        }
+
+        body.light-theme .bg-gray-800 {
+            background-color: #e2e8f0 !important;
+        }
+
+        body.light-theme .bg-red-600 {
+            background-color: #ff3b3b !important;
+        }
+
+        body.light-theme .text-red-500 {
+            color: #ff3b3b !important;
+        }
+
+        body.light-theme .text-green-500 {
+            color: #38a169 !important;
+        }
+
+        body.light-theme .bg-red-600\/50 {
+            background-color: rgba(255, 59, 59, 0.5) !important;
+        }
+
+        body.light-theme .bg-black\/50 {
+            background-color: rgba(0, 0, 0, 0.1) !important;
+        }
     </style>
 </head>
 <body class="scroll-smooth">
@@ -130,6 +287,11 @@
 
                 <!-- User Actions -->
                 <div class="flex items-center space-x-4">
+                    <!-- Кнопка переключения темы -->
+                    <button id="theme-toggle" class="text-white hover:text-red-500 transition-colors" title="Переключить тему">
+                        <i class="fas fa-moon"></i>
+                    </button>
+
                     <button class="text-white hover:text-red-500 transition-colors">
                         <i class="fas fa-heart text-lg"></i>
                     </button>
@@ -170,13 +332,12 @@
                     </div>
                 </div>
                 <div class="relative">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4a70f3cc-dd3f-41d4-950d-3c3ee7c2ed21.png" alt="Modern technology gadgets showcase with sleek design and neon lighting" class="rounded-2xl shadow-2xl">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/97a5bef8-bc2f-4ce5-8bea-43ee4128f969.png" alt="Современные гаджеты и электроника с красной подсветкой на темном фоне" class="rounded-2xl shadow-2xl w-full">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-black/50 to-black/80 rounded-2xl"></div>
                 </div>
             </div>
         </div>
     </section>
-
 
     <!-- Catalog Section -->
     <section id="catalog" class="py-16 bg-black section-border">
@@ -185,7 +346,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Product 1 -->
                 <div class="product-card rounded-xl p-4">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6bf9cb15-94a8-43bb-b244-2b7be006d3c9.png" alt="Gaming laptop with RGB keyboard and sleek design" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b1ec396d-0c08-461c-8be4-033dc2b0062a.png" alt="Игровой ноутбук с RGB подсветкой клавиатуры и современным дизайном в красных тонах" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h3 class="font-semibold text-lg mb-2">Gaming Laptop Pro</h3>
                     <p class="text-gray-400 text-sm mb-3">Мощный игровой ноутбук с RTX 4060</p>
                     <div class="flex justify-between items-center mb-3">
@@ -196,7 +357,7 @@
                         <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
                             В корзину
                         </button>
-                        <button class="w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600">
+                        <button class="favorite-btn w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" data-product-id="1">
                             <i class="fas fa-heart"></i>
                         </button>
                     </div>
@@ -204,7 +365,7 @@
 
                 <!-- Product 2 -->
                 <div class="product-card rounded-xl p-4">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6136f5e2-d6f8-4898-9332-a7c0413351d8.png" alt="Ultra-thin business laptop with metal finish" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/369943d3-f8b1-40ba-bce5-bc5c6cd5f231.png" alt="Ультратонкий бизнес-ноутбук серебристого цвета с металлическим корпусом" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h3 class="font-semibold text-lg mb-2">UltraBook Business</h3>
                     <p class="text-gray-400 text-sm mb-3">Стильный ультрабук для работы</p>
                     <div class="flex justify-between items-center mb-3">
@@ -215,7 +376,7 @@
                         <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
                             В корзину
                         </button>
-                        <button class="w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600">
+                        <button class="favorite-btn w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" data-product-id="2">
                             <i class="fas fa-heart"></i>
                         </button>
                     </div>
@@ -223,7 +384,7 @@
 
                 <!-- Product 3 -->
                 <div class="product-card rounded-xl p-4">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/93bef984-6fc8-45c5-96a7-7ee7fec0ab33.png" alt="Wireless headphones with noise cancellation" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/312469eb-d4f9-4f1b-be13-fada57b3c46a.png" alt="Беспроводные наушники черного цвета с функцией шумоподавления" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h3 class="font-semibold text-lg mb-2">Wireless Headphones</h3>
                     <p class="text-gray-400 text-sm mb-3">Беспроводные наушники с шумоподавлением</p>
                     <div class="flex justify-between items-center mb-3">
@@ -234,7 +395,7 @@
                         <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
                             В корзину
                         </button>
-                        <button class="w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600">
+                        <button class="favorite-btn w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" data-product-id="3">
                             <i class="fas fa-heart"></i>
                         </button>
                     </div>
@@ -242,7 +403,7 @@
 
                 <!-- Product 4 -->
                 <div class="product-card rounded-xl p-4">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/bc48cc29-e184-4ebb-a764-68759245b41a.png" alt="Smart watch with fitness tracking features" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8c8fa20b-8d2a-40bf-a813-e8ef2ed80215.png" alt="Умные часы черного цвета с сенсорным экраном и красным ремешком" class="w-full h-48 object-cover rounded-lg mb-4">
                     <h3 class="font-semibold text-lg mb-2">Smart Watch Pro</h3>
                     <p class="text-gray-400 text-sm mb-3">Умные часы с отслеживанием здоровья</p>
                     <div class="flex justify-between items-center mb-3">
@@ -253,7 +414,7 @@
                         <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
                             В корзину
                         </button>
-                        <button class="w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600">
+                        <button class="favorite-btn w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" data-product-id="4">
                             <i class="fas fa-heart"></i>
                         </button>
                     </div>
@@ -273,7 +434,7 @@
                         <div class="carousel-item product-card min-w-[300px] rounded-xl p-4">
                             <div class="relative">
                                 <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">NEW</span>
-                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e76642c8-4b62-46f5-9b1f-842d6e052bde.png" alt="Latest gaming console with wireless controllers" class="w-full h-48 object-cover rounded-lg mb-4">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/138477e8-8af9-4e19-bf29-5ba3dae3050d.png" alt="Новая игровая консоль черного цвета с красной подсветкой" class="w-full h-48 object-cover rounded-lg mb-4">
                             </div>
                             <h3 class="font-semibold text-lg mb-2">Gaming Console X</h3>
                             <p class="text-gray-400 text-sm mb-3">Новая игровая консоль 2024</p>
@@ -290,7 +451,7 @@
                         <div class="carousel-item product-card min-w-[300px] rounded-xl p-4">
                             <div class="relative">
                                 <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">NEW</span>
-                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e25dc362-3fb5-4525-abd3-3c5c742580fb.png" alt="4K Ultra HD Smart TV with thin bezels" class="w-full h-48 object-cover rounded-lg mb-4">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/551879e2-73ec-4afe-8c70-3b069460272e.png" alt="4K Smart TV с тонкой рамкой и современным дизайном" class="w-full h-48 object-cover rounded-lg mb-4">
                             </div>
                             <h3 class="font-semibold text-lg mb-2">4K Smart TV 65"</h3>
                             <p class="text-gray-400 text-sm mb-3">Умный телевизор с 4K разрешением</p>
@@ -307,7 +468,7 @@
                         <div class="carousel-item product-card min-w-[300px] rounded-xl p-4">
                             <div class="relative">
                                 <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">NEW</span>
-                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6675ae52-ca5c-4c2f-81be-023f9265722f.png" alt="Wireless charging station for multiple devices" class="w-full h-48 object-cover rounded-lg mb-4">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/758d2eb9-df8b-4130-9d03-22272e6528ab.png" alt="Беспроводная зарядная станция для трех устройств одновременно" class="w-full h-48 object-cover rounded-lg mb-4">
                             </div>
                             <h3 class="font-semibold text-lg mb-2">Wireless Charger</h3>
                             <p class="text-gray-400 text-sm mb-3">Беспроводная зарядка 3-в-1</p>
@@ -324,7 +485,7 @@
                         <div class="carousel-item product-card min-w-[300px] rounded-xl p-4">
                             <div class="relative">
                                 <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">NEW</span>
-                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/bbfc63b6-dfe0-4f89-a211-db3effa73f87.png" alt="Portable SSD drive with high-speed data transfer" class="w-full h-48 object-cover rounded-lg mb-4">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5332651e-865b-4026-aaa5-8abdf1f985f0.png" alt="Портативный SSD накопитель металлического серебристого цвета" class="w-full h-48 object-cover rounded-lg mb-4">
                             </div>
                             <h3 class="font-semibold text-lg mb-2">Portable SSD 2TB</h3>
                             <p class="text-gray-400 text-sm mb-3">Высокоскоростной SSD накопитель</p>
@@ -400,7 +561,7 @@
                 <div>
                     <h3 class="text-xl font-semibold mb-6">Мы на карте</h3>
                     <div class="bg-gray-800 rounded-lg p-4 h-64 flex items-center justify-center">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d21b6823-11c8-49f2-a520-ea871d240271.png" alt="Map location of DvrnTechStore in Bishkek, Kyrgyzstan" class="w-full h-full object-cover rounded">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/95298eee-1a08-43c1-b2e2-381a26f68732.png" alt="Карта расположения магазина DvrnTechStore в центре Бишкека" class="w-full h-full object-cover rounded">
                     </div>
                 </div>
             </div>
@@ -456,6 +617,57 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Переключение темы
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = themeToggle.querySelector('i');
+
+            // Проверяем сохраненную тему
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                themeIcon.className = 'fas fa-sun';
+            }
+
+            themeToggle.addEventListener('click', function() {
+                if (document.body.classList.contains('light-theme')) {
+                    document.body.classList.remove('light-theme');
+                    localStorage.setItem('theme', 'dark');
+                    themeIcon.className = 'fas fa-moon';
+                } else {
+                    document.body.classList.add('light-theme');
+                    localStorage.setItem('theme', 'light');
+                    themeIcon.className = 'fas fa-sun';
+                }
+            });
+
+            // Кнопки избранного
+            const favoriteButtons = document.querySelectorAll('.favorite-btn');
+
+            // Восстанавливаем состояние избранного из localStorage
+            favoriteButtons.forEach(btn => {
+                const productId = btn.getAttribute('data-product-id');
+                const isFavorite = localStorage.getItem(`favorite_${productId}`) === 'true';
+
+                if (isFavorite) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Обработчик клика на кнопки избранного
+            favoriteButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-product-id');
+
+                    if (this.classList.contains('active')) {
+                        this.classList.remove('active');
+                        localStorage.setItem(`favorite_${productId}`, 'false');
+                    } else {
+                        this.classList.add('active');
+                        localStorage.setItem(`favorite_${productId}`, 'true');
+                    }
+                });
+            });
+
             // Add to cart functionality
             const addToCartButtons = document.querySelectorAll('.add-to-cart');
             addToCartButtons.forEach(button => {
