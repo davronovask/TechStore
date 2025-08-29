@@ -66,6 +66,39 @@
       background-color: #ff3b3b;
       border-radius: 3px;
     }
+        body.light-theme {
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      color: #2d3748;
+      transition: all 0.3s ease;
+    }
+    body.light-theme .product-card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      border: 2px solid #ff3b3b;
+      box-shadow: 0 4px 25px rgba(255, 59, 59, 0.15);
+      color: #2d3748;
+    }
+    body.light-theme .product-card:hover {
+      box-shadow: 0 8px 35px rgba(255, 59, 59, 0.25);
+      border-color: #ff3b3b;
+    }
+    body.light-theme .gradient-text {
+      background: linear-gradient(45deg, #d94a4a, #e06b6b, #d94a4a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    body.light-theme input,
+    body.light-theme select,
+    body.light-theme button {
+      background-color: #fff !important;
+      color: #2d3748 !important;
+      border-color: #ccc !important;
+      transition: all 0.3s ease;
+    }
+    body.light-theme input::placeholder {
+      color: #999 !important;
+    }
+
   </style>
 </head>
 <body>
@@ -83,6 +116,9 @@
         <a href="favorites.html" class="hover:text-red-500">Избранное</a>
         <a href="login.html" class="hover:text-red-500">Вход</a>
       </nav>
+      <button id="theme-toggle" class="text-white hover:text-red-500 transition-colors ml-4" title="Переключить тему" aria-label="Переключить тему">
+        <i class="fas fa-moon"></i>
+      </button>
     </div>
   </header>
 
@@ -360,6 +396,30 @@
     });
   </script>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const themeToggle = document.getElementById('theme-toggle');
+      const icon = themeToggle.querySelector('i');
+
+      // Восстановление темы из localStorage
+      if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-theme');
+        icon.className = 'fas fa-sun';
+      }
+
+      themeToggle.addEventListener('click', () => {
+        if (document.body.classList.contains('light-theme')) {
+          document.body.classList.remove('light-theme');
+          localStorage.setItem('theme', 'dark');
+          icon.className = 'fas fa-moon';
+        } else {
+          document.body.classList.add('light-theme');
+          localStorage.setItem('theme', 'light');
+          icon.className = 'fas fa-sun';
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
