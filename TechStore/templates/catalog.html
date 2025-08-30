@@ -98,7 +98,177 @@
     body.light-theme input::placeholder {
       color: #999 !important;
     }
+    /* Светлая тема - ПОЛНОСТЬЮ ПЕРЕПИСАНА */
+    body.light-theme {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        color: #2d3748;
+    }
 
+    body.light-theme .header-gradient {
+        background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 50%, #ffffff 100%);
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    body.light-theme .product-card {
+        background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+        border: 2px solid #ff3b3b; /* Красная рамка */
+        box-shadow: 0 4px 25px rgba(255, 59, 59, 0.15);
+        color: #2d3748;
+    }
+
+    body.light-theme .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 35px rgba(255, 59, 59, 0.25);
+        border-color: #ff3b3b;
+    }
+
+    body.light-theme .neon-glow {
+        text-shadow: 0 0 4px rgba(255, 59, 59, 0.3), 0 0 8px rgba(255, 59, 59, 0.15);
+        color: #c53030; /* Менее яркий красный для лучшей читаемости */
+    }
+
+    body.light-theme .gradient-text {
+        background: linear-gradient(45deg, #d94a4a, #e06b6b, #d94a4a);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    body.light-theme .section-border {
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    body.light-theme .btn-primary {
+        background: linear-gradient(45deg, #ff3b3b, #ff6b6b);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 59, 59, 0.3);
+    }
+
+    body.light-theme .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 59, 59, 0.4);
+    }
+
+    body.light-theme .category-btn.active {
+        border-color: #ff3b3b;
+        background: rgba(255, 59, 59, 0.1);
+    }
+
+    body.light-theme .cart-badge {
+        background-color: #ff3b3b;
+        color: white;
+    }
+
+    body.light-theme .text-gray-300 {
+        color: #718096 !important;
+    }
+
+    body.light-theme .text-gray-400 {
+        color: #a0aec0 !important;
+    }
+
+    body.light-theme .bg-black {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+    }
+
+    body.light-theme .bg-gray-900 {
+        background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 100%) !important;
+    }
+
+    body.light-theme .bg-gradient-to-b {
+        background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%) !important;
+    }
+
+    body.light-theme footer {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+        color: #2d3748;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    body.light-theme footer a {
+        color: #4a5568 !important;
+    }
+
+    body.light-theme footer a:hover {
+        color: #ff3b3b !important;
+    }
+
+    body.light-theme .header-gradient a,
+    body.light-theme .header-gradient button {
+        color: #2d3748 !important;
+    }
+
+    body.light-theme .header-gradient a:hover,
+    body.light-theme .header-gradient button:hover {
+        color: #ff3b3b !important;
+    }
+
+    body.light-theme .border-gray-600 {
+        border-color: #cbd5e0 !important;
+    }
+
+    body.light-theme .hover\:border-red-500:hover {
+        border-color: #ff3b3b !important;
+    }
+
+    body.light-theme .bg-gray-700 {
+        background-color: #cbd5e0 !important;
+    }
+
+    body.light-theme .bg-gray-800 {
+        background-color: #e2e8f0 !important;
+    }
+
+    body.light-theme .bg-red-600 {
+        background-color: #ff3b3b !important;
+    }
+
+    body.light-theme .text-red-500 {
+        color: #ff3b3b !important;
+    }
+
+    body.light-theme .text-green-500 {
+        color: #38a169 !important;
+    }
+
+    body.light-theme .bg-red-600\/50 {
+        background-color: rgba(255, 59, 59, 0.5) !important;
+    }
+
+    body.light-theme .bg-black\/50 {
+        background-color: rgba(0, 0, 0, 0.1) !important;
+    }
+/* Светлая тема - кнопки каталога и фильтров */
+body.light-theme .btn,
+body.light-theme .category-btn,
+body.light-theme .filter-btn {
+    background-color: #2d3748; /* тёмно-серый/чёрный фон */
+    color: #fff; /* белый текст */
+    border-color: #2d3748;
+    transition: all 0.3s ease;
+}
+
+body.light-theme .btn:hover,
+body.light-theme .category-btn:hover,
+body.light-theme .filter-btn:hover {
+    background-color: #1a202c; /* чуть темнее при ховере */
+    border-color: #ff3b3b; /* красная граница при наведении */
+    color: #fff;
+}
+
+/* Активная категория */
+body.light-theme .category-btn.active {
+    background-color: #ff3b3b; /* красная кнопка при выборе */
+    color: #fff;
+    border-color: #ff3b3b;
+}
+
+/* Активная фильтр-кнопка */
+body.light-theme .filter-btn.active {
+    background-color: #ff3b3b;
+    color: #fff;
+    border-color: #ff3b3b;
+}
   </style>
 </head>
 <body>
