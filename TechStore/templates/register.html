@@ -47,6 +47,71 @@
     .toggle-password:hover {
       color: #ff3b3b;
     }
+    body.light-theme {
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      color: #2d3748;
+      transition: all 0.3s ease;
+    }
+
+    body.light-theme header {
+      background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+      color: #2d3748;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    body.light-theme .gradient-text {
+      background: linear-gradient(45deg, #d94a4a, #e06b6b, #d94a4a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    body.light-theme input {
+      background-color: #f1f5f9;
+      color: #2d3748;
+      border-color: #ccc;
+    }
+
+    body.light-theme input::placeholder {
+      color: #a0aec0;
+    }
+
+    body.light-theme input:focus {
+      border-color: #ff3b3b;
+      box-shadow: 0 0 8px #ff3b3b;
+      outline: none;
+    }
+
+    body.light-theme button {
+      background-color: #ff3b3b;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    body.light-theme button:hover {
+      background-color: #e02e2e;
+    }
+
+    body.light-theme .bg-gray-900 {
+      background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 100%) !important;
+    }
+
+    body.light-theme .bg-black {
+      background: #ffffff !important;
+    }
+
+    body.light-theme .text-white {
+      color: #2d3748 !important;
+    }
+
+    body.light-theme .text-gray-400 {
+      color: #718096 !important;
+    }
+
+    body.light-theme .border-gray-700 {
+      border-color: #cbd5e0 !important;
+    }
+
   </style>
 </head>
 <body>
@@ -59,6 +124,10 @@
         <h1 class="text-2xl font-bold gradient-text">DvrnTechStore</h1>
       </div>
       <nav class="hidden md:flex space-x-6 text-white">
+        <button id="theme-toggle" class="text-white hover:text-red-500 transition-colors ml-4" title="Переключить тему">
+          <i class="fas fa-moon"></i>
+        </button>
+
         <a href="{% url 'home' %}" class="hover:text-red-500">Главная</a>
         <a href="#" class="hover:text-red-500">Каталог</a>
         <a href="{% url 'login' %}" class="hover:text-red-500">Вход</a>
@@ -130,5 +199,31 @@
       });
     });
   </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Восстановление темы из localStorage
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeIcon = themeToggle.querySelector('i');
+
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        themeIcon.className = 'fas fa-sun';
+      }
+
+      themeToggle.addEventListener('click', () => {
+        if (document.body.classList.contains('light-theme')) {
+          document.body.classList.remove('light-theme');
+          localStorage.setItem('theme', 'dark');
+          themeIcon.className = 'fas fa-moon';
+        } else {
+          document.body.classList.add('light-theme');
+          localStorage.setItem('theme', 'light');
+          themeIcon.className = 'fas fa-sun';
+        }
+      });
+    });
+  </script>
+
 </body>
 </html>
