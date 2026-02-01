@@ -1,8 +1,21 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import User, PendingUser
 
-@admin.register(CustomUser)
-class CustomUserAdmin(UserAdmin):
-    model = CustomUser
-    list_display = ('username', 'email', 'is_staff', 'is_active')
+# Register your models here.
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = [
+        'email',
+        'phone_number',
+        'first_name',
+        'last_name',
+    ]
+
+@admin.register(PendingUser)
+class PendingUserAdmin(admin.ModelAdmin):
+    list_display = [
+        'email',
+        'phone_number',
+        'verification_code',
+        'register_at',
+    ]

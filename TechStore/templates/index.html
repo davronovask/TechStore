@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -8,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Все оригинальные стили из вашего HTML */
         * {
             margin: 0;
             padding: 0;
@@ -261,359 +263,285 @@
         body.light-theme .bg-black\/50 {
             background-color: rgba(0, 0, 0, 0.1) !important;
         }
+
+        /* Дополнительные стили для слайдеров (адаптировано из вашего нового примера) */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .prev-btn {
+            left: 10px;
+        }
+
+        .next-btn {
+            right: 10px;
+        }
+
+        .popular-category {
+            margin-bottom: 2rem;
+        }
+
+        .category-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .category-item {
+            background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #333;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .category-item:hover {
+            transform: translateY(-5px);
+            border-color: #ff3b3b;
+        }
+
+        .category-item img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 0.5rem;
+        }
+
+        .products-container {
+            margin-bottom: 2rem;
+        }
+
+        .products-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .multi-slider-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .multi-slider-track-container {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .multi-slider-track {
+            display: flex;
+            gap: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .ms-btn {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .badge-discount {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ff3b3b;
+            color: white;
+            padding: 5px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .price .new-price {
+            font-weight: bold;
+            color: #ff3b3b;
+        }
+
+        .currency {
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body class="scroll-smooth">
-    <!-- Header -->
-    <header class="header-gradient fixed w-full top-0 z-50 shadow-2xl">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-xl">D</span>
-                    </div>
-                    <h1 class="text-2xl font-bold gradient-text">DvrnTechStore</h1>
+    {% include 'includes/header.html' %}
+
+    <main id="main" class="main">
+        <div class="container mx-auto px-4 pt-32">
+            <!-- Слайдер баннеров (вместо Hero Section) -->
+            <div class="slider-container">
+                {% for banner in banners %}
+                <div class="slide {% if forloop.first %}active{% endif %}">
+                    <img src="{{ banner.image.url }}" alt="{{ banner.title|default:'Баннер' }}" />
                 </div>
+                {% empty %}
+                <div class="slide active">
+                    <img src="{% static 'banner/default.jpg' %}" alt="Default Banner" />
+                </div>
+                {% endfor %}
 
-                <!-- Navigation -->
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="text-white hover:text-red-500 transition-colors">Главная</a>
-                    <a href="#catalog" class="text-white hover:text-red-500 transition-colors">Каталог</a>
-                    <a href="#new" class="text-white hover:text-red-500 transition-colors">Новинки</a>
-                    <a href="#sales" class="text-white hover:text-red-500 transition-colors">Акции</a>
-                    <a href="#contacts" class="text-white hover:text-red-500 transition-colors">Контакты</a>
-                </nav>
+                {% if banners.count > 1 %}
+                <button class="prev-btn">❮</button>
+                <button class="next-btn">❯</button>
+                {% endif %}
+            </div>
 
-                <!-- User Actions -->
-                <div class="flex items-center space-x-4">
-                    <!-- Кнопка переключения темы -->
-                    <button id="theme-toggle" class="text-white hover:text-red-500 transition-colors" title="Переключить тему">
-                        <i class="fas fa-moon"></i>
-                    </button>
+            <!-- Популярные категории -->
+            <div class="popular-category">
+                <div class="category-list">
+                    {% for category in categories %}
+                    <a href="{% url 'category' category.slug %}" class="category-link">
+                        <div class="category-item">
+                            {% if category.image %}
+                            <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                            {% endif %}
+                            <span class="category-name">{{ category.name }}</span>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
 
-                    <button class="text-white hover:text-red-500 transition-colors">
-                        <i class="fas fa-heart text-lg"></i>
-                    </button>
-                    <button class="relative text-white hover:text-red-500 transition-colors">
-                        <i class="fas fa-shopping-cart text-lg"></i>
-                        <span class="cart-badge absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
-                    </button>
-                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                        <i class="fas fa-user mr-2"></i>Войти
-                    </button>
-                    <button class="border border-red-600 text-red-500 px-4 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-colors">
-                        Регистрация
-                    </button>
+            <!-- Хиты продаж и новинки (слайдер продуктов) -->
+            <div class="products-container">
+                <h2 class="products-title gradient-text">Хиты продаж и новинки</h2>
+                <div class="multi-slider-wrapper">
+                    <button class="ms-btn ms-prev"><i class="fas fa-chevron-left"></i></button>
+                    <div class="multi-slider-track-container">
+                        <div class="multi-slider-track">
+                            {% for product in products %}
+                            <div class="product-card rounded-xl p-4 min-w-[250px]">
+                                <form action="{% url 'toggle_favorite' product.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button class="favorite-btn w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" type="submit">
+                                        {% if product.id in favorite_product_ids %}
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="red" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                        </svg>
+                                        {% else %}
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                        </svg>
+                                        {% endif %}
+                                    </button>
+                                </form>
+
+                                {% with discount=product.active_discount %}
+                                {% if discount %}
+                                <div class="badge-discount">-{{ discount.percent }}%</div>
+                                {% endif %}
+                                {% endwith %}
+
+                                <a href="{% url 'product_detail' product.slug %}">
+                                    {% if product.main_image %}
+                                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="w-full h-48 object-cover rounded-lg mb-4">
+                                    {% endif %}
+                                </a>
+                                <h3 class="font-semibold text-lg mb-2">{{ product.name }}</h3>
+                                <div class="price">
+                                    {% if product.active_discount %}
+                                    <span class="new-price">{{ product.discounted_price }} <span class="currency">сом</span></span>
+                                    {% else %}
+                                    <span class="new-price">{{ product.price }} <span class="currency">сом</span></span>
+                                    {% endif %}
+                                </div>
+                                <a href="{% url 'product_detail' product.slug %}">
+                                    <button class="add-to-cart w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">В корзину</button>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button class="ms-btn ms-next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Акционные товары (слайдер продуктов) -->
+            <div class="products-container">
+                <h2 class="products-title gradient-text">Акционные товары</h2>
+                <div class="multi-slider-wrapper">
+                    <button class="ms-btn ms-prev"><i class="fas fa-chevron-left"></i></button>
+                    <div class="multi-slider-track-container">
+                        <div class="multi-slider-track">
+                            {% for product in discount_products %}
+                            <div class="product-card rounded-xl p-4 min-w-[250px]">
+                                <form action="{% url 'toggle_favorite' product.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button class="favorite-btn w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" type="submit">
+                                        {% if product.id in favorite_product_ids %}
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="red" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                            </svg>
+                                        {% else %}
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                            </svg>
+                                        {% endif %}
+                                    </button>
+                                </form>
+
+                                {% with discount=product.active_discount %}
+                                {% if discount %}
+                                <div class="badge-discount">-{{ discount.percent }}%</div>
+                                {% endif %}
+                                {% endwith %}
+
+                                <a href="{% url 'product_detail' product.slug %}">
+                                    {% if product.main_image %}
+                                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="w-full h-48 object-cover rounded-lg mb-4">
+                                    {% endif %}
+                                </a>
+                                <h3 class="font-semibold text-lg mb-2">{{ product.name }}</h3>
+                                <div class="price">
+                                    <span class="new-price">{{ product.discounted_price }} <span class="currency">сом</span></span>
+                                </div>
+                                <a href="{% url 'product_detail' product.slug %}">
+                                    <button class="add-to-cart w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">В корзину</button>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button class="ms-btn ms-next"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
         </div>
-    </header>
+    </main>
 
-    <!-- Hero Section -->
-    <section id="home" class="pt-32 pb-20 bg-gradient-to-b from-black to-gray-900">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h2 class="text-5xl font-bold mb-6 neon-glow">
-                        Техника <span class="gradient-text">будущего</span><br>уже сегодня
-                    </h2>
-                    <p class="text-gray-300 text-lg mb-8">
-                        Самые современные гаджеты и техника по лучшим ценам в Кыргызстане.
-                        Открой для себя мир технологий с DvrnTechStore.
-                    </p>
-                    <div class="flex space-x-4">
-                        <button class="btn-primary px-8 py-3 rounded-lg text-white font-semibold">
-                            Смотреть каталог
-                        </button>
-                        <button class="border border-gray-600 text-white px-8 py-3 rounded-lg hover:border-red-500 transition-colors">
-                            Подробнее
-                        </button>
-                    </div>
-                </div>
-                <div class="relative">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/97a5bef8-bc2f-4ce5-8bea-43ee4128f969.png" alt="Современные гаджеты и электроника с красной подсветкой на темном фоне" class="rounded-2xl shadow-2xl w-full">
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-black/50 to-black/80 rounded-2xl"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Catalog Section -->
-    <section id="catalog" class="py-16 bg-black section-border">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">Каталог товаров</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Product 1 -->
-                <div class="product-card rounded-xl p-4">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b1ec396d-0c08-461c-8be4-033dc2b0062a.png" alt="Игровой ноутбук с RGB подсветкой клавиатуры и современным дизайном в красных тонах" class="w-full h-48 object-cover rounded-lg mb-4">
-                    <h3 class="font-semibold text-lg mb-2">Gaming Laptop Pro</h3>
-                    <p class="text-gray-400 text-sm mb-3">Мощный игровой ноутбук с RTX 4060</p>
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-red-500 font-bold text-xl">89 999 сом</span>
-                        <span class="text-green-500 text-sm">В наличии</span>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
-                            В корзину
-                        </button>
-                        <button class="favorite-btn w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" data-product-id="1">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="product-card rounded-xl p-4">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/369943d3-f8b1-40ba-bce5-bc5c6cd5f231.png" alt="Ультратонкий бизнес-ноутбук серебристого цвета с металлическим корпусом" class="w-full h-48 object-cover rounded-lg mb-4">
-                    <h3 class="font-semibold text-lg mb-2">UltraBook Business</h3>
-                    <p class="text-gray-400 text-sm mb-3">Стильный ультрабук для работы</p>
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-red-500 font-bold text-xl">64 500 сом</span>
-                        <span class="text-green-500 text-sm">В наличии</span>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
-                            В корзину
-                        </button>
-                        <button class="favorite-btn w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" data-product-id="2">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="product-card rounded-xl p-4">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/312469eb-d4f9-4f1b-be13-fada57b3c46a.png" alt="Беспроводные наушники черного цвета с функцией шумоподавления" class="w-full h-48 object-cover rounded-lg mb-4">
-                    <h3 class="font-semibold text-lg mb-2">Wireless Headphones</h3>
-                    <p class="text-gray-400 text-sm mb-3">Беспроводные наушники с шумоподавлением</p>
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-red-500 font-bold text-xl">12 999 сом</span>
-                        <span class="text-green-500 text-sm">В наличии</span>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
-                            В корзину
-                        </button>
-                        <button class="favorite-btn w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" data-product-id="3">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Product 4 -->
-                <div class="product-card rounded-xl p-4">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8c8fa20b-8d2a-40bf-a813-e8ef2ed80215.png" alt="Умные часы черного цвета с сенсорным экраном и красным ремешком" class="w-full h-48 object-cover rounded-lg mb-4">
-                    <h3 class="font-semibold text-lg mb-2">Smart Watch Pro</h3>
-                    <p class="text-gray-400 text-sm mb-3">Умные часы с отслеживанием здоровья</p>
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-red-500 font-bold text-xl">8 499 сом</span>
-                        <span class="text-green-500 text-sm">В наличии</span>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
-                            В корзину
-                        </button>
-                        <button class="favorite-btn w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" data-product-id="4">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- New Products Carousel -->
-    <section id="new" class="py-16 bg-gray-900 section-border">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">Новинки</h2>
-            <div class="relative">
-                <div class="carousel-container overflow-hidden">
-                    <div class="carousel-track flex space-x-6">
-                        <!-- New Product 1 -->
-                        <div class="carousel-item product-card min-w-[300px] rounded-xl p-4">
-                            <div class="relative">
-                                <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">NEW</span>
-                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/138477e8-8af9-4e19-bf29-5ba3dae3050d.png" alt="Новая игровая консоль черного цвета с красной подсветкой" class="w-full h-48 object-cover rounded-lg mb-4">
-                            </div>
-                            <h3 class="font-semibold text-lg mb-2">Gaming Console X</h3>
-                            <p class="text-gray-400 text-sm mb-3">Новая игровая консоль 2024</p>
-                            <div class="flex justify-between items-center mb-3">
-                                <span class="text-red-500 font-bold text-xl">129 999 сом</span>
-                                <span class="text-green-500 text-sm">В наличии</span>
-                            </div>
-                            <button class="add-to-cart w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
-                                В корзину
-                            </button>
-                        </div>
-
-                        <!-- New Product 2 -->
-                        <div class="carousel-item product-card min-w-[300px] rounded-xl p-4">
-                            <div class="relative">
-                                <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">NEW</span>
-                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/551879e2-73ec-4afe-8c70-3b069460272e.png" alt="4K Smart TV с тонкой рамкой и современным дизайном" class="w-full h-48 object-cover rounded-lg mb-4">
-                            </div>
-                            <h3 class="font-semibold text-lg mb-2">4K Smart TV 65"</h3>
-                            <p class="text-gray-400 text-sm mb-3">Умный телевизор с 4K разрешением</p>
-                            <div class="flex justify-between items-center mb-3">
-                                <span class="text-red-500 font-bold text-xl">78 999 сом</span>
-                                <span class="text-green-500 text-sm">В наличии</span>
-                            </div>
-                            <button class="add-to-cart w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
-                                В корзину
-                            </button>
-                        </div>
-
-                        <!-- New Product 3 -->
-                        <div class="carousel-item product-card min-w-[300px] rounded-xl p-4">
-                            <div class="relative">
-                                <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">NEW</span>
-                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/758d2eb9-df8b-4130-9d03-22272e6528ab.png" alt="Беспроводная зарядная станция для трех устройств одновременно" class="w-full h-48 object-cover rounded-lg mb-4">
-                            </div>
-                            <h3 class="font-semibold text-lg mb-2">Wireless Charger</h3>
-                            <p class="text-gray-400 text-sm mb-3">Беспроводная зарядка 3-в-1</p>
-                            <div class="flex justify-between items-center mb-3">
-                                <span class="text-red-500 font-bold text-xl">5 999 сом</span>
-                                <span class="text-green-500 text-sm">В наличии</span>
-                            </div>
-                            <button class="add-to-cart w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
-                                В корзину
-                            </button>
-                        </div>
-
-                        <!-- New Product 4 -->
-                        <div class="carousel-item product-card min-w-[300px] rounded-xl p-4">
-                            <div class="relative">
-                                <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">NEW</span>
-                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5332651e-865b-4026-aaa5-8abdf1f985f0.png" alt="Портативный SSD накопитель металлического серебристого цвета" class="w-full h-48 object-cover rounded-lg mb-4">
-                            </div>
-                            <h3 class="font-semibold text-lg mb-2">Portable SSD 2TB</h3>
-                            <p class="text-gray-400 text-sm mb-3">Высокоскоростной SSD накопитель</p>
-                            <div class="flex justify-between items-center mb-3">
-                                <span class="text-red-500 font-bold text-xl">15 999 сом</span>
-                                <span class="text-green-500 text-sm">В наличии</span>
-                            </div>
-                            <button class="add-to-cart w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
-                                В корзину
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <button class="carousel-prev absolute left-0 top-1/2 transform -translate-y-1/2 bg-black/50 p-3 rounded-full text-white">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="carousel-next absolute right-0 top-1/2 transform -translate-y-1/2 bg-black/50 p-3 rounded-full text-white">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sales Section -->
-    <section id="sales" class="py-16 bg-black section-border">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">Акции</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-8 text-white">
-                    <h3 class="text-2xl font-bold mb-4">Скидка 20% на все ноутбуки</h3>
-                    <p class="mb-6">Только этой неделей получите скидку 20% на весь ассортимент ноутбуков.</p>
-                    <button class="bg-white text-red-600 px-6 py-2 rounded-lg font-semibold">
-                        Посмотреть товары
-                    </button>
-                </div>
-                <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-8 text-white border border-red-500">
-                    <h3 class="text-2xl font-bold mb-4">Рассрочка 0%</h3>
-                    <p class="mb-6">Покупайте технику в рассрочку без процентов на 6 месяцев.</p>
-                    <button class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold">
-                        Узнать условия
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contacts Section -->
-    <section id="contacts" class="py-16 bg-gray-900">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">Контакты</h2>
-            <div class="grid md:grid-cols-2 gap-12">
-                <div>
-                    <h3 class="text-xl font-semibold mb-6">Наши контакты</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-map-marker-alt text-red-500"></i>
-                            <span>г. Бишкек, ул. Советская 123</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-phone text-red-500"></i>
-                            <span>+996 (555) 123-456</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-envelope text-red-500"></i>
-                            <span>info@dvrntech.kg</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-clock text-red-500"></i>
-                            <span>Пн-Пт: 9:00-18:00, Сб-Вс: 10:00-16:00</span>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold mb-6">Мы на карте</h3>
-                    <div class="bg-gray-800 rounded-lg p-4 h-64 flex items-center justify-center">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/95298eee-1a08-43c1-b2e2-381a26f68732.png" alt="Карта расположения магазина DvrnTechStore в центре Бишкека" class="w-full h-full object-cover rounded">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-black py-12">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-8">
-                <div>
-                    <h4 class="text-xl font-bold gradient-text mb-4">DvrnTechStore</h4>
-                    <p class="text-gray-400">Лучший выбор техники в Кыргызстане</p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Каталог</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-red-500">Ноутбуки</a></li>
-                        <li><a href="#" class="hover:text-red-500">Планшеты</a></li>
-                        <li><a href="#" class="hover:text-red-500">Аксессуары</a></li>
-                        <li><a href="#" class="hover:text-red-500">Телевизоры</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Помощь</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-red-500">Доставка</a></li>
-                        <li><a href="#" class="hover:text-red-500">Оплата</a></li>
-                        <li><a href="#" class="hover:text-red-500">Гарантия</a></li>
-                        <li><a href="#" class="hover:text-red-500">Возврат</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Соцсети</h4>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600">
-                            <i class="fab fa-telegram"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>© 2024 DvrnTechStore. Все права защищены.</p>
-            </div>
-        </div>
-    </footer>
+    {% include 'includes/footer.html' %}
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -696,29 +624,6 @@
                 });
             });
 
-            // Carousel functionality
-            const carouselTrack = document.querySelector('.carousel-track');
-            const carouselItems = document.querySelectorAll('.carousel-item');
-            const prevBtn = document.querySelector('.carousel-prev');
-            const nextBtn = document.querySelector('.carousel-next');
-
-            let currentPosition = 0;
-            const itemWidth = carouselItems[0].offsetWidth + 24; // width + gap
-
-            nextBtn.addEventListener('click', () => {
-                if (currentPosition > -((carouselItems.length - 4) * itemWidth)) {
-                    currentPosition -= itemWidth;
-                    carouselTrack.style.transform = `translateX(${currentPosition}px)`;
-                }
-            });
-
-            prevBtn.addEventListener('click', () => {
-                if (currentPosition < 0) {
-                    currentPosition += itemWidth;
-                    carouselTrack.style.transform = `translateX(${currentPosition}px)`;
-                }
-            });
-
             // Smooth scrolling for navigation
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
@@ -732,8 +637,55 @@
                     }
                 });
             });
+
+            // Слайдер баннеров (адаптировано из вашего нового примера)
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            let currentSlide = 0;
+
+            function showSlide(index) {
+                slides.forEach(slide => slide.classList.remove('active'));
+                slides[index].classList.add('active');
+            }
+
+            if (prevBtn && nextBtn) {
+                prevBtn.addEventListener('click', () => {
+                    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                    showSlide(currentSlide);
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    showSlide(currentSlide);
+                });
+            }
+
+            // Слайдеры продуктов (адаптировано из вашего нового примера)
+            document.querySelectorAll('.multi-slider-wrapper').forEach(wrapper => {
+                const container = wrapper.querySelector('.multi-slider-track-container');
+                const prevBtn = wrapper.querySelector('.ms-prev');
+                const nextBtn = wrapper.querySelector('.ms-next');
+
+                const moveSlide = (direction) => {
+                    const card = wrapper.querySelector('.product-card');
+                    if (!card) return;
+
+                    const cardWidth = card.offsetWidth;
+                    const gap = 16;
+                    const scrollAmount = cardWidth + gap;
+
+                    if (direction === 'next') {
+                        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                    } else {
+                        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                    }
+                };
+
+                nextBtn.addEventListener('click', () => moveSlide('next'));
+                prevBtn.addEventListener('click', () => moveSlide('prev'));
+            });
         });
     </script>
 </body>
 </html>
-
