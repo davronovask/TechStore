@@ -1,595 +1,187 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Каталог — DvrnTechStore</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-      color: #fff;
-      min-height: 100vh;
-    }
-    .product-description {
-  max-height: 4.5em; /* примерно 3 строки */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3; /* сколько строк показывать */
-  -webkit-box-orient: vertical;
-  word-break: break-word;
-}
-    .gradient-text {
-      background: linear-gradient(45deg, #ff3b3b, #ff6b6b, #ff3b3b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .product-card {
-      background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
-      border: 1px solid #333;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
-    .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 30px rgba(255, 59, 59, 0.2);
-      border-color: #ff3b3b;
-    }
-    input:focus {
-      outline: none;
-      border-color: #ff3b3b;
-      box-shadow: 0 0 8px #ff3b3b;
-    }
-    .filter-btn.active {
-      background-color: #ff3b3b;
-      border-color: #ff3b3b;
-    }
-    .filter-btn.active:hover {
-      background-color: #e02e2e;
-    }
-    .add-to-cart {
-      transition: all 0.3s ease;
-    }
-    .add-to-cart.added {
-      background: #00ff00 !important;
-      color: #000 !important;
-    }
-    .scrollbar-thin::-webkit-scrollbar {
-      width: 6px;
-    }
-    .scrollbar-thin::-webkit-scrollbar-thumb {
-      background-color: #ff3b3b;
-      border-radius: 3px;
-    }
-        body.light-theme {
-      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-      color: #2d3748;
-      transition: all 0.3s ease;
-    }
-    body.light-theme .product-card {
-      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-      border: 2px solid #ff3b3b;
-      box-shadow: 0 4px 25px rgba(255, 59, 59, 0.15);
-      color: #2d3748;
-    }
-    body.light-theme .product-card:hover {
-      box-shadow: 0 8px 35px rgba(255, 59, 59, 0.25);
-      border-color: #ff3b3b;
-    }
-    body.light-theme .gradient-text {
-      background: linear-gradient(45deg, #d94a4a, #e06b6b, #d94a4a);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    body.light-theme input,
-    body.light-theme select,
-    body.light-theme button {
-      background-color: #fff !important;
-      color: #2d3748 !important;
-      border-color: #ccc !important;
-      transition: all 0.3s ease;
-    }
-    body.light-theme input::placeholder {
-      color: #999 !important;
-    }
-    /* Светлая тема - ПОЛНОСТЬЮ ПЕРЕПИСАНА */
-    body.light-theme {
-        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-        color: #2d3748;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    body.light-theme .header-gradient {
-        background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 50%, #ffffff 100%);
-        border-bottom: 1px solid #e2e8f0;
-    }
+    <!-- Css -->
+    <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/catalog.css' %}" />
 
-    body.light-theme .product-card {
-        background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-        border: 2px solid #ff3b3b; /* Красная рамка */
-        box-shadow: 0 4px 25px rgba(255, 59, 59, 0.15);
-        color: #2d3748;
-    }
-
-    body.light-theme .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 35px rgba(255, 59, 59, 0.25);
-        border-color: #ff3b3b;
-    }
-
-    body.light-theme .neon-glow {
-        text-shadow: 0 0 4px rgba(255, 59, 59, 0.3), 0 0 8px rgba(255, 59, 59, 0.15);
-        color: #c53030; /* Менее яркий красный для лучшей читаемости */
-    }
-
-    body.light-theme .gradient-text {
-        background: linear-gradient(45deg, #d94a4a, #e06b6b, #d94a4a);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-
-    body.light-theme .section-border {
-        border-bottom: 1px solid #e2e8f0;
-    }
-
-    body.light-theme .btn-primary {
-        background: linear-gradient(45deg, #ff3b3b, #ff6b6b);
-        color: white;
-        box-shadow: 0 4px 15px rgba(255, 59, 59, 0.3);
-    }
-
-    body.light-theme .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 59, 59, 0.4);
-    }
-
-    body.light-theme .category-btn.active {
-        border-color: #ff3b3b;
-        background: rgba(255, 59, 59, 0.1);
-    }
-
-    body.light-theme .cart-badge {
-        background-color: #ff3b3b;
-        color: white;
-    }
-
-    body.light-theme .text-gray-300 {
-        color: #718096 !important;
-    }
-
-    body.light-theme .text-gray-400 {
-        color: #a0aec0 !important;
-    }
-
-    body.light-theme .bg-black {
-        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
-    }
-
-    body.light-theme .bg-gray-900 {
-        background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 100%) !important;
-    }
-
-    body.light-theme .bg-gradient-to-b {
-        background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%) !important;
-    }
-
-    body.light-theme footer {
-        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
-        color: #2d3748;
-        border-top: 1px solid #e2e8f0;
-    }
-
-    body.light-theme footer a {
-        color: #4a5568 !important;
-    }
-
-    body.light-theme footer a:hover {
-        color: #ff3b3b !important;
-    }
-
-    body.light-theme .header-gradient a,
-    body.light-theme .header-gradient button {
-        color: #2d3748 !important;
-    }
-
-    body.light-theme .header-gradient a:hover,
-    body.light-theme .header-gradient button:hover {
-        color: #ff3b3b !important;
-    }
-
-    body.light-theme .border-gray-600 {
-        border-color: #cbd5e0 !important;
-    }
-
-    body.light-theme .hover\:border-red-500:hover {
-        border-color: #ff3b3b !important;
-    }
-
-    body.light-theme .bg-gray-700 {
-        background-color: #cbd5e0 !important;
-    }
-
-    body.light-theme .bg-gray-800 {
-        background-color: #e2e8f0 !important;
-    }
-
-    body.light-theme .bg-red-600 {
-        background-color: #ff3b3b !important;
-    }
-
-    body.light-theme .text-red-500 {
-        color: #ff3b3b !important;
-    }
-
-    body.light-theme .text-green-500 {
-        color: #38a169 !important;
-    }
-
-    body.light-theme .bg-red-600\/50 {
-        background-color: rgba(255, 59, 59, 0.5) !important;
-    }
-
-    body.light-theme .bg-black\/50 {
-        background-color: rgba(0, 0, 0, 0.1) !important;
-    }
-/* Светлая тема - кнопки каталога и фильтров */
-body.light-theme .btn,
-body.light-theme .category-btn,
-body.light-theme .filter-btn {
-    background-color: #2d3748; /* тёмно-серый/чёрный фон */
-    color: #fff; /* белый текст */
-    border-color: #2d3748;
-    transition: all 0.3s ease;
-}
-
-body.light-theme .btn:hover,
-body.light-theme .category-btn:hover,
-body.light-theme .filter-btn:hover {
-    background-color: #1a202c; /* чуть темнее при ховере */
-    border-color: #ff3b3b; /* красная граница при наведении */
-    color: #fff;
-}
-
-/* Активная категория */
-body.light-theme .category-btn.active {
-    background-color: #ff3b3b; /* красная кнопка при выборе */
-    color: #fff;
-    border-color: #ff3b3b;
-}
-
-/* Активная фильтр-кнопка */
-body.light-theme .filter-btn.active {
-    background-color: #ff3b3b;
-    color: #fff;
-    border-color: #ff3b3b;
-}
-  </style>
+    <title>Каталог</title>
 </head>
 <body>
-  <header class="fixed top-0 w-full bg-black bg-opacity-90 z-50 shadow-md">
-    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-          <span class="text-white font-bold text-xl">D</span>
-        </div>
-        <h1 class="text-2xl font-bold gradient-text">DvrnTechStore</h1>
-      </div>
-      <nav class="hidden md:flex space-x-6 text-white">
-        <a href="index.html" class="hover:text-red-500">Главная</a>
-        <a href="cart.html" class="hover:text-red-500">Корзина</a>
-        <a href="favorites.html" class="hover:text-red-500">Избранное</a>
-        <a href="login.html" class="hover:text-red-500">Вход</a>
-      </nav>
-      <button id="theme-toggle" class="text-white hover:text-red-500 transition-colors ml-4" title="Переключить тему" aria-label="Переключить тему">
-        <i class="fas fa-moon"></i>
-      </button>
-    </div>
-  </header>
+    {% include 'includes/header.html' %}
 
-  <main class="container mx-auto px-4 pt-28 pb-16 min-h-screen">
-    <!-- Заголовок и поиск -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-      <h2 class="text-4xl font-bold gradient-text">Каталог товаров</h2>
-      <div class="relative w-full md:w-80">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Поиск товаров..."
-          class="w-full px-4 py-3 pl-12 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400"
-        />
-        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-      </div>
-    </div>
+    <main class="main">
+        <div class="container">
+            <div class="catalog-layout">
+                <!-- Кнопка открытия фильтров (видна только на мобильном) -->
+                <button class="mobile-filter-btn" id="open-filters">
+                    <i class="fa-solid fa-sliders"></i> Фильтры
+                </button>
 
-    <div class="flex flex-col lg:flex-row gap-8">
-      <!-- Сайдбар фильтров -->
-      <aside class="w-full lg:w-80 bg-gray-900 rounded-xl p-6 shadow-lg h-fit">
-        <h3 class="text-2xl font-semibold mb-6">Фильтры</h3>
+                <!-- Затемнение фона -->
+                <div class="filters-overlay" id="filters-overlay"></div>
 
-        <!-- Категории -->
-        <div class="mb-6">
-          <h4 class="font-semibold mb-3">Категории</h4>
-          <div class="space-y-2">
-            <button class="filter-btn w-full text-left px-3 py-2 rounded bg-gray-800 hover:bg-gray-700 active" data-category="all">
-              Все товары
-            </button>
-            {% for category in categories %}
-              <button class="filter-btn w-full text-left px-3 py-2 rounded bg-gray-800 hover:bg-gray-700" data-category="{{ category.slug }}">
-                {{ category.name }}
-              </button>
-            {% endfor %}
-          </div>
-        </div>
+                <aside class="filters-sidebar" id="filters-sidebar">
+                    <form method="get" action="{% url 'category' slug='all' %}">
+                        <!-- Шапка мобильного меню фильтров -->
+                        <div class="sidebar-mobile-header">
+                            <h3>Фильтры</h3>
+                            <button class="close-filters-btn" id="close-filters">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
 
-        <!-- Цена -->
-        <div class="mb-6">
-          <h4 class="font-semibold mb-3">Цена, сом</h4>
-          <div class="flex items-center space-x-4 mb-3">
-            <input
-              type="number"
-              id="minPrice"
-              placeholder="От"
-              min="0"
-              class="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 text-white"
-            />
-            <span>-</span>
-            <input
-              type="number"
-              id="maxPrice"
-              placeholder="До"
-              min="0"
-              class="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 text-white"
-            />
-          </div>
-          <button id="applyPriceFilter" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">
-            Применить
-          </button>
-        </div>
+                        <div class="filter-group active">
+                            <div class="filter-header">
+                                <h4 class="filter-title">Категории</h4>
+                                <i class="fa-solid fa-chevron-down arrow"></i>
+                            </div>
+                            <div class="filter-content">
+                                <ul class="filter-list">
+                                    {% for category in categories %}
+                                    <li>
+                                        <label class="custom-checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="category"
+                                                value="{{ category.slug }}"
+                                                {% if category.slug in selected_categories %}checked{% endif %}
+                                            />
+                                            <span>{{ category.name }}</span>
+                                        </label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
 
-        <!-- Наличие -->
-        <div class="mb-6">
-          <h4 class="font-semibold mb-3">Наличие</h4>
-          <label class="flex items-center cursor-pointer">
-            <input type="checkbox" id="inStock" class="mr-2 h-5 w-5" checked />
-            <span>Только в наличии</span>
-          </label>
-        </div>
+                        <div class="filter-group active">
+                            <div class="filter-header">
+                                <h4 class="filter-title">Цена (сом)</h4>
+                                <i class="fa-solid fa-chevron-down arrow"></i>
+                            </div>
+                            <div class="filter-content">
+                                <div class="price-inputs">
+                                    <div class="price-field">
+                                        <span>от</span>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            name="price_min"
+                                            placeholder="0"
+                                            class="min-price"
+                                            value="{{ request.GET.price_min|default_if_none:'' }}"
+                                        />
+                                    </div>
+                                    <div class="price-field">
+                                        <span>до</span>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            name="price_max"
+                                            placeholder="200 000"
+                                            class="max-price"
+                                            value="{{ request.GET.price_max|default_if_none:'' }}"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-        <!-- Сортировка -->
-        <div>
-          <h4 class="font-semibold mb-3">Сортировка</h4>
-          <select id="sortSelect" class="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 text-white">
-            <option value="name-asc">По названию (А-Я)</option>
-            <option value="name-desc">По названию (Я-А)</option>
-            <option value="price-asc">По цене (↑)</option>
-            <option value="price-desc">По цене (↓)</option>
-            <option value="newest">Сначала новые</option>
-          </select>
-        </div>
-      </aside>
+                        <div class="filter-group active">
+                            <div class="filter-header">
+                                <h4 class="filter-title">Бренд</h4>
+                                <i class="fa-solid fa-chevron-down arrow"></i>
+                            </div>
+                            <div class="filter-content">
+                                <ul class="filter-list">
+                                    {% for brand in brands %}
+                                    <li>
+                                        <label class="custom-checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="brand"
+                                                value="{{ brand.slug }}"
+                                                {% if brand.slug in selected_brands %}checked{% endif %}
+                                            />
+                                            <span>{{ brand.name }}</span>
+                                        </label>
+                                    </li>
+                                    {% empty %}
+                                    <li>Брендов нет</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="filter-actions">
+                            <button type="submit" class="reset-filters-btn">Сбросить</button>
+                            <button type="submit" class="apply-filters-btn">Применить</button>
+                        </div>
+                    </form>
+                </aside>
 
-      <!-- Основной контент с товарами -->
-      <section class="flex-1">
-
-        <!-- Статистика фильтрации -->
-        <div class="flex justify-between items-center mb-6">
-          <p id="productsCount" class="text-gray-400">Найдено 12 товаров</p>
-          <div class="flex items-center space-x-4">
-            <button id="gridView" class="text-red-500" title="Сетка">
-              <i class="fas fa-th-large text-lg"></i>
-            </button>
-            <button id="listView" class="text-gray-400" title="Список">
-              <i class="fas fa-list text-lg"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Сетка товаров -->
-        <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Товары будут добавляться через JavaScript -->
-        </div>
-
-        <!-- Пагинация -->
-        <div class="flex justify-center mt-12">
-          <div class="flex space-x-2">
-            <button class="px-4 py-2 bg-gray-800 rounded hover:bg-gray-700">←</button>
-            <button class="px-4 py-2 bg-red-600 rounded">1</button>
-            <button class="px-4 py-2 bg-gray-800 rounded hover:bg-gray-700">2</button>
-            <button class="px-4 py-2 bg-gray-800 rounded hover:bg-gray-700">3</button>
-            <button class="px-4 py-2 bg-gray-800 rounded hover:bg-gray-700">→</button>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <footer class="bg-black py-12">
-    <div class="container mx-auto px-4 text-center text-gray-400">
-      © 2024 DvrnTechStore. Все права защищены.
-    </div>
-  </footer>
-
-  <script>
-    // Данные товаров
-    const products = [
-      {% for product in products %}
-        {
-          id: {{ product.id }},
-          name: "{{ product.name|escapejs }}",
-          description: "{{ product.description|escapejs }}",
-          price: {{ product.price }},
-          category: "{{ product.category.slug }}",
-          inStock: {% if product.quantity > 0 %}true{% else %}false{% endif %},
-          image: "{{ product.image.url }}",
-          isNew: {{ product.is_new|yesno:"true,false" }},
-          sale: {{ product.sale|default:"null" }} // если есть поле sale в модели
-        },
-      {% endfor %}
-    ];
-
-    let filteredProducts = [...products];
-    let currentView = 'grid'; // grid или list
-
-    // Функция рендеринга товаров
-    function renderProducts() {
-      const productsGrid = document.getElementById('productsGrid');
-      productsGrid.innerHTML = '';
-
-      filteredProducts.forEach(product => {
-        const productCard = document.createElement('div');
-        productCard.className = `product-card rounded-xl p-4 ${currentView === 'list' ? 'flex items-center' : ''}`;
-        productCard.innerHTML = `
-          <div class="${currentView === 'list' ? 'flex-shrink-0 mr-4' : ''}">
-            <img src="${product.image}" alt="${product.name}" class="${currentView === 'list' ? 'w-32 h-24' : 'w-full h-48'} object-cover rounded-lg mb-4" />
-          </div>
-          <div class="${currentView === 'list' ? 'flex-1' : ''}">
-            <div class="flex space-x-1 mb-2">
-              ${product.isNew ? '<span class="bg-red-600 text-white text-xs px-2 py-1 rounded inline-block">NEW</span>' : ''}
-              ${product.sale ? `<span class="bg-green-600 text-white text-xs px-2 py-1 rounded inline-block">${product.sale}% OFF</span>` : ''}
+                <main class="products-container">
+                    <div class="products-list">
+                        {% for product in products %}
+                        <div class="product-card animate-in">
+                            {% with discount=product.active_discount %}
+                                {% if discount %}
+                                    <div class="badge-discount">-{{ discount.percent }}%</div>
+                                {% endif %}
+                            {% endwith %}
+                            <form action="{% url 'toggle_favorite' product.id %}" method="POST">
+                                {% csrf_token %}
+                                <button class="favorite-btn" type="submit">
+                                    {% if product.id in favorite_product_ids %}
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="red" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                    {% else %}
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                    {% endif %}
+                                </button>
+                            </form>
+                            <a href="{% url 'product_detail' product.slug %}">
+                                {% if product.main_image %}
+                                    <img
+                                        src="{{ product.main_image.url }}"
+                                        alt="{{ product.name }}"
+                                        class="product-image"
+                                    />
+                                {% endif %}
+                            </a>
+                            <h3 class="product-title">{{ product.name }}</h3>
+                            <div class="price">
+                                {% if product.active_discount %}
+                                    {{ product.discounted_price }} <span class="currency">сом</span>
+                                {% else %}
+                                    {{ product.price }} <span class="currency">сом</span>
+                                {% endif %}
+                            </div>
+                            <a href="{% url 'product_detail' product.slug %}">
+                                <button class="add-to-cart-btn">В корзину</button>
+                            </a>
+                        </div>
+                        {% empty %}
+                            <p class="no-products">Товары не найдены</p>
+                        {% endfor %}
+                    </div>
+                </main>
             </div>
-            <h3 class="font-semibold text-lg mb-2">${product.name}</h3>
-            <p class="product-description text-gray-400 text-sm mb-3">${product.description}</p>
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-red-500 font-bold text-xl">${product.price.toLocaleString()} сом</span>
-              <span class="text-sm ${product.inStock ? 'text-green-500' : 'text-red-500'}">
-                ${product.inStock ? 'В наличии' : 'Нет в наличии'}
-              </span>
-            </div>
-            <div class="flex space-x-2">
-              <button class="add-to-cart flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 ${!product.inStock ? 'opacity-50 cursor-not-allowed' : ''}" ${!product.inStock ? 'disabled' : ''}>
-                ${product.inStock ? 'В корзину' : 'Нет в наличии'}
-              </button>
-              <button class="w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600">
-                <i class="far fa-heart"></i>
-              </button>
-            </div>
-          </div>
-        `;
-        productsGrid.appendChild(productCard);
-      });
+        </div>
+    </main>
+    {% include 'includes/footer.html' %}
 
-      // Обновляем счетчик товаров
-      document.getElementById('productsCount').textContent = `Найдено ${filteredProducts.length} товаров`;
-    }
-
-    // Функция фильтрации товаров
-    function filterProducts() {
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      const category = document.querySelector('.filter-btn.active').dataset.category;
-      const minPrice = parseInt(document.getElementById('minPrice').value) || 0;
-      const maxPrice = parseInt(document.getElementById('maxPrice').value) || Infinity;
-      const inStockOnly = document.getElementById('inStock').checked;
-      const sortBy = document.getElementById('sortSelect').value;
-
-      filteredProducts = products.filter(product => {
-        const matchesSearch = product.name.toLowerCase().includes(searchTerm) ||
-                              product.description.toLowerCase().includes(searchTerm);
-        const matchesCategory = category === 'all' || product.category === category;
-        const matchesPrice = product.price >= minPrice && product.price <= maxPrice;
-        const matchesStock = !inStockOnly || product.inStock;
-
-        return matchesSearch && matchesCategory && matchesPrice && matchesStock;
-      });
-
-      // Сортировка
-      switch (sortBy) {
-        case 'name-asc': filteredProducts.sort((a,b)=>a.name.localeCompare(b.name)); break;
-        case 'name-desc': filteredProducts.sort((a,b)=>b.name.localeCompare(a.name)); break;
-        case 'price-asc': filteredProducts.sort((a,b)=>a.price-b.price); break;
-        case 'price-desc': filteredProducts.sort((a,b)=>b.price-a.price); break;
-        case 'newest': filteredProducts.sort((a,b)=>(b.isNew?1:0)-(a.isNew?1:0)); break;
-      }
-
-      renderProducts();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      renderProducts();
-
-      // Поиск и фильтры
-      document.getElementById('searchInput').addEventListener('input', filterProducts);
-      document.getElementById('applyPriceFilter').addEventListener('click', filterProducts);
-      document.getElementById('inStock').addEventListener('change', filterProducts);
-      document.getElementById('sortSelect').addEventListener('change', filterProducts);
-
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          filterProducts();
-        });
-      });
-
-      // Переключение вида
-      document.getElementById('gridView').addEventListener('click', () => {
-        currentView = 'grid';
-        document.getElementById('gridView').classList.add('text-red-500');
-        document.getElementById('listView').classList.remove('text-red-500');
-        document.getElementById('listView').classList.add('text-gray-400');
-        renderProducts();
-      });
-      document.getElementById('listView').addEventListener('click', () => {
-        currentView = 'list';
-        document.getElementById('listView').classList.add('text-red-500');
-        document.getElementById('gridView').classList.remove('text-red-500');
-        document.getElementById('gridView').classList.add('text-gray-400');
-        renderProducts();
-      });
-
-      // Добавление в корзину
-      document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('add-to-cart') && !e.target.disabled) {
-          e.target.classList.add('added');
-          e.target.textContent = 'Добавлено!';
-          setTimeout(() => {
-            e.target.classList.remove('added');
-            e.target.textContent = 'В корзину';
-          }, 2000);
-        }
-
-        // Сердечко избранного
-        if (e.target.closest('.fa-heart')) {
-          const heartBtn = e.target.closest('button');
-          heartBtn.classList.toggle('bg-red-600');
-          heartBtn.classList.toggle('text-white');
-          const icon = heartBtn.querySelector('i');
-          icon.classList.toggle('fas'); // полное
-          icon.classList.toggle('far'); // пустое
-        }
-      });
-    });
-  </script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const themeToggle = document.getElementById('theme-toggle');
-      const icon = themeToggle.querySelector('i');
-
-      // Восстановление темы из localStorage
-      if (localStorage.getItem('theme') === 'light') {
-        document.body.classList.add('light-theme');
-        icon.className = 'fas fa-sun';
-      }
-
-      themeToggle.addEventListener('click', () => {
-        if (document.body.classList.contains('light-theme')) {
-          document.body.classList.remove('light-theme');
-          localStorage.setItem('theme', 'dark');
-          icon.className = 'fas fa-moon';
-        } else {
-          document.body.classList.add('light-theme');
-          localStorage.setItem('theme', 'light');
-          icon.className = 'fas fa-sun';
-        }
-      });
-    });
-  </script>
-
+    <script src="{% static 'js/header.js' %}" defer></script>
+    <script src="{% static 'js/catalog.js' %}" defer></script>
 </body>
 </html>

@@ -102,21 +102,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileThemeToggleBtn = document.getElementById('mobile-theme-toggle');
     const body = document.body;
 
+    console.log('Theme toggle buttons found:', themeToggleBtn, mobileThemeToggleBtn); // Отладка
+
+    // Загрузка темы из localStorage
+    const savedTheme = localStorage.getItem('theme');
+    console.log('Saved theme:', savedTheme); // Отладка
+    if (savedTheme === 'light') {
+        body.classList.add('theme-light');
+        console.log('Applied theme-light from localStorage'); // Отладка
+    }
+
     // Функция переключения
     const toggleTheme = () => {
+        console.log('Toggle theme called'); // Отладка
         if (body.classList.contains('theme-light')) {
             body.classList.remove('theme-light');
+            localStorage.setItem('theme', 'dark');
+            console.log('Switched to dark theme'); // Отладка
         } else {
             body.classList.add('theme-light');
+            localStorage.setItem('theme', 'light');
+            console.log('Switched to light theme'); // Отладка
         }
     };
 
     // Обработчики кликов
     if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', toggleTheme);
+        console.log('Desktop theme toggle listener added'); // Отладка
     }
     if (mobileThemeToggleBtn) {
         mobileThemeToggleBtn.addEventListener('click', toggleTheme);
+        console.log('Mobile theme toggle listener added'); // Отладка
     }
 });
 
