@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Css -->
+    <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/email_confirm.css' %}" />
+
+    <title>Подтверждение почты</title>
+</head>
+<body>
+    {% include "includes/header.html" %}
+
+    <main class="main">
+        <div class="container">
+            <div class="confirm-container">
+                <form method="POST" action="{% url 'confirm_email' %}">
+                    {% csrf_token %}
+                    <h1>Подтверждение почты</h1>
+                    <p>Пожалуйста, проверьте вашу электронную почту</p>
+                    <input type="text" name="verification_code" placeholder="Введите код подтверждения" required />
+                    <input type="hidden" name="email" value="{{email}}" />
+                    <button class="confirm-btn" type="submit">Подтвердить</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    {% include "includes/footer.html" %}
+
+    <script src="{% static 'js/components.js' %}"></script>
+    <script src="{% static 'js/header.js' %}"></script>
+</body>
+</html>

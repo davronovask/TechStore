@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/single_product.css' %}" />
+
+    <title>Страница продукта</title>
+</head>
+<body>
+    {% include 'includes/header.html' %}
+
+    <main class="main">
+        <div class="container">
+            <div class="product-layout">
+                <div class="product-gallery">
+                    <div class="gallery-main">
+                        <img id="mainProductImage" src="{{ product.variants.first.get_images_list.0.url }}" alt="{{ product.name }}">
+                    </div>
+                    <div class="gallery-thumbs" id="thumbnailsContainer">
+                        {% for img in product.variants.first.get_images_list %}
+                        <div class="thumb {% if forloop.first %}active{% endif %}" onclick="changeImage(this, '{{ img.url }}')">
+                            <img src="{{ img.url }}" alt="Product Image {{ forloop.counter }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    {% with discount=product.active_discount %}
+                        {% if discount %}
+                            <div class="badges">
+                                <span class="badge badge-discount">-{{ discount.percent }}%</span>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    <h1 class="product-title">{{ product.name }}</h1>
+
+                    <div class="product-meta">
+                        <span class="article">{{ product_sku }}</span>
+                        <span class="stock-status">
+                            {% if stock_status == 'in_stock' %}
+                                <i class="fa-solid fa-check"></i> В наличии
+                            {% elif stock_status == 'out_of_stock' %}
+                                <i class="fa-solid fa-xmark"></i> Нет в наличии
+                            {% elif stock_status == 'preorder' %}
+                                <i class="fa-solid fa-clock"></i> Под заказ
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="price-block">
+                        {% if old_price %}
+                            <div class="old-price">{{ old_price|floatformat:0 }} сом</div>
+                        {% endif %}
+                        <div class="current-price">{{ current_price|floatformat:0 }} сом</div>
+                    </div>
+
+                    <div class="product-options">
+                        <div class="option-group">
+                            <span class="label">Цвет: <b id="colorLabel">{{ color_variants.first.name }}</b></span>
+                            <div class="color-options">
+                                {% for variant in color_variants %}
+                                <div class="color-opt {% if forloop.first %}active{% endif %} {% if not variant.is_available %}sold-out-opt{% endif %}"
+                                     style="background-color: {{ variant.color }}"
+                                     data-color-name="{{ variant.name }}"
+                                     data-color-id="{{ variant.id }}"
+                                     data-images="{% for img in variant.get_images_list %}{{ img.url }}{% if not forloop.last %},{% endif %}{% endfor %}"
+                                     data-available="{{ variant.is_available|lower }}"
+                                     onclick="selectColor(this)">
+                                    {% if not variant.is_available %}
+                                    <div class="sold-out-overlay">
+                                        <span class="sold-out-label">X</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        {% if has_memory_options %}
+                        <div class="option-group">
+                            <span class="label">Объем памяти:</span>
+                            <div class="memory-options" id="memorySelector"></div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-primary-buy">Купить сейчас</button>
+                        <form method="post" action="{% url 'add_to_cart' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <input type="hidden" name="color_id" id="colorInput" value="{{ color_variants.first.id }}">
+                            <input type="hidden" name="memory_id" id="memoryInput" value="">
+                            <button type="submit" class="btn-secondary-cart">
+                                <i class="fa-solid fa-cart-shopping"></i> В корзину
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="specs-block">
+                        <h3>Характеристики:</h3>
+                        <ul class="specs-list" id="visibleSpecs">
+                            {% for attr in main_specs %}
+                            <li>
+                                <span class="spec-name">{{ attr.name }}</span><span class="dots"></span>
+                                <span class="spec-val">{{ attr.value }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <ul class="specs-list hidden-specs" id="hiddenSpecs" style="display: none;">
+                            {% for attr in extra_specs %}
+                            <li>
+                                <span class="spec-name">{{ attr.name }}</span><span class="dots"></span>
+                                <span class="spec-val">{{ attr.value }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <button class="toggle-specs-btn" id="specsBtn" onclick="toggleSpecs()">Все характеристики</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    {% include 'includes/footer.html' %}
+
+    <script src="{% static 'js/components.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            initMobileMenu();
+            initStickyHeader();
+        });
+    </script>
+    <script>
+        function changeImage(element, newSrc) {
+            document.querySelectorAll('.thumb').forEach(thumb => thumb.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('mainProductImage').src = newSrc;
+        }
+
+        function selectMemory(element) {
+            document.querySelectorAll('.mem-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function toggleSpecs() {
+            const hiddenList = document.getElementById('hiddenSpecs');
+            const btn = document.getElementById('specsBtn');
+            if (hiddenList.style.display === 'block') {
+                hiddenList.style.display = 'none';
+                btn.textContent = 'Все характеристики';
+            } else {
+                hiddenList.style.display = 'block';
+                btn.textContent = 'Свернуть характеристики';
+            }
+        }
+
+        const memoryMap = {{ memory_map_json|safe }};
+
+        function selectColor(element) {
+            if (element.dataset.available === 'false') return;
+            document.querySelectorAll('.color-opt').forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            const colorId = element.dataset.colorId;
+            const colorName = element.dataset.colorName;
+            document.getElementById('colorLabel').textContent = colorName;
+            document.getElementById('colorInput').value = colorId;
+            const images = element.dataset.images.split(',');
+            const thumbnailsContainer = document.getElementById('thumbnailsContainer');
+            const mainImage = document.getElementById('mainProductImage');
+            thumbnailsContainer.innerHTML = '';
+            images.forEach((src, index) => {
+                if (!src) return;
+                const thumbDiv = document.createElement('div');
+                thumbDiv.className = 'thumb' + (index === 0 ? ' active' : '');
+                thumbDiv.onclick = function() { changeImage(this, src); };
+                const imgEl = document.createElement('img');
+                imgEl.src = src;
+                thumbDiv.appendChild(imgEl);
+                thumbnailsContainer.appendChild(thumbDiv);
+                if (index === 0) mainImage.src = src;
+            });
+            const memorySelector = document.getElementById('memorySelector');
+            if (memorySelector) {
+                memorySelector.innerHTML = '';
+                const options = memoryMap[colorId] || [];
+                options.forEach(mem => {
+                    const btn = document.createElement('button');
+                    btn.innerText = mem.size;
+                    btn.className = 'mem-btn';
+                    if (!mem.is_available) {
+                        btn.classList.add('disabled-btn');
+                        btn.disabled = true;
+                    } else {
+                        btn.onclick = function() {
+                            document.querySelectorAll('.mem-btn').forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            const currentPriceEl = document.querySelector('.current-price');
+                            const oldPriceEl = document.querySelector('.old-price');
+                            if (currentPriceEl) currentPriceEl.textContent = mem.price + ' сом';
+                            if (oldPriceEl) {
+                                if (mem.old_price) {
+                                    oldPriceEl.textContent = mem.old_price + ' сом';
+                                    oldPriceEl.style.display = 'block';
+                                } else {
+                                    oldPriceEl.style.display = 'none';
+                                }
+                            }
+                            document.getElementById('memoryInput').value = mem.id;
+                        };
+                    }
+                    memorySelector.appendChild(btn);
+                });
+                const firstAvailable = memorySelector.querySelector('.mem-btn:not(.disabled-btn)');
+                if (firstAvailable) firstAvailable.click();
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const activeColor = document.querySelector('.color-opt.active');
+            if (activeColor) selectColor(activeColor);
+        });
+    </script>
+    <script src="{% static 'js/header.js' %}"></script>
+</body>
+</html>
