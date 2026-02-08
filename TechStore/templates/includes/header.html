@@ -1,216 +1,157 @@
 {% load static %}
-<header class="header-gradient fixed w-full top-0 z-50 shadow-2xl">
-    <!-- Topbar (новый элемент, адаптированный) -->
-    <div class="header-topbar bg-black/50 py-2">
-        <div class="container mx-auto px-4 flex justify-between items-center text-white text-sm">
-            <span class="header-address flex items-center space-x-2">
-                <i class="fas fa-map-marker-alt text-red-500"></i>
-                <span>Джалал-Абадская обл, Сузакский р-н, Таш-булак с, Жаны Конуш ул, 150</span>
+<header class="header">
+    <div class="header-topbar">
+        <div class="container">
+            <span class="header-address">
+                <i class="fa-solid fa-location-dot"></i>
+                {{ contacts.city }}, {{ contacts.street }}
             </span>
-            <div class="header-phone flex items-center space-x-2">
-                <i class="fas fa-phone text-red-500"></i>
+
+            <div class="header-phone">
+                <i class="fa-solid fa-phone"></i>
                 {% if social_links.whatsapp %}
-                <a href="https://wa.me/{{ social_links.whatsapp }}" target="_blank" class="text-white hover:text-red-500">
+                <a href="https://wa.me/{{ social_links.whatsapp }}" target="_blank">
                     <span class="header-number">+{{ social_links.whatsapp }}</span>
                 </a>
                 {% endif %}
-                <span class="header-timetable">9:00–22:00 ежедневно</span>
+                <span class="header-timetable">{{ contacts.work_time }}</span>
             </div>
         </div>
     </div>
+    <div class="header-line"></div>
+    <nav id="MyHeader" class="header-nav">
+        <div class="container">
+            <a href="{% url 'home' %}" class="header-logo-link">
+                <img class="header-logo" src="{% static 'logo.png' %}" alt="Logo" />
+            </a>
 
-    <!-- Main Navigation (адаптированный оригинальный + новый) -->
-    <div class="container mx-auto px-4 py-3">
-        <div class="flex items-center justify-between">
-            <!-- Logo -->
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-                    <span class="text-white font-bold text-xl">D</span>
-                </div>
-                <h1 class="text-2xl font-bold gradient-text">DvrnTechStore</h1>
-            </div>
-
-            <!-- Desktop Navigation (новый: каталог, поиск, иконки) -->
-            <div class="hidden md:flex items-center space-x-8">
-                <button class="header-catalog-btn category-btn bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-red-600" id="catalog-btn">
-                    <i class="fas fa-layer-group"></i>
+            <div class="header-desktop-elements">
+                <button class="header-catalog-btn" id="catalog-btn" type="button">
+                    <i class="fa-solid fa-layer-group"></i>
                     <span>Каталог</span>
                 </button>
-                <form action="{% url 'category' 'all' %}" method="get" class="header-search flex items-center bg-gray-800 rounded-lg px-3 py-2">
-                    <input class="header-input bg-transparent text-white placeholder-gray-400 outline-none flex-1" type="text" name="q" placeholder="Поиск..." value="{{ request.GET.q }}" />
-                    <button type="submit" class="header-search-icon text-red-500 ml-2">
-                        <i class="fas fa-search"></i>
+
+                <form action="{% url 'category' 'all' %}" method="get" class="header-search">
+                    <input
+                        class="header-input"
+                        type="text"
+                        name="q"
+                        placeholder="Поиск..."
+                        value="{{ request.GET.q }}"
+                    />
+                    <button type="submit" class="header-search-icon">
+                        <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </form>
-                <div class="header-icons flex items-center space-x-4">
-                    <a href="{% url 'favorites' %}" class="text-white hover:text-red-500 transition-colors">
-                        <i class="fas fa-heart text-lg"></i>
+
+                <div class="header-icons">
+                    <a href="{% url 'favorites' %}">
+                        <div class="header-favorite">
+                            <i class="fa-regular fa-heart"></i><span>Избранное</span>
+                        </div>
                     </a>
-                    <a href="{% url 'cart' %}" class="relative text-white hover:text-red-500 transition-colors">
-                        <i class="fas fa-shopping-cart text-lg"></i>
-                        <span class="cart-badge absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                    <a href="{% url 'cart' %}">
+                        <div class="header-cart">
+                            <i class="fa-solid fa-cart-shopping"></i><span>Корзина</span>
+                        </div>
                     </a>
                     {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}" class="text-white hover:text-red-500 transition-colors">
-                        <i class="fas fa-user text-lg"></i>
+                    <!-- Если пользователь вошёл, показываем профиль -->
+                    <a href="{% url 'profile' %}">
+                        <div class="header-user">
+                            <i class="fa-regular fa-user"></i>
+                            <span>{{ user.first_name|default:"Профиль" }}</span>
+                        </div>
                     </a>
                     {% else %}
-                    <a href="{% url 'login' %}" class="text-white hover:text-red-500 transition-colors">
-                        <i class="fas fa-user text-lg"></i>
+                    <!-- Если не вошёл, показываем вход -->
+                    <a href="{% url 'login' %}">
+                        <div class="header-user">
+                            <i class="fa-regular fa-user"></i>
+                            <span>Вход</span>
+                        </div>
                     </a>
                     {% endif %}
+                    <button class="theme-toggle-btn" id="theme-toggle">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
                 </div>
             </div>
 
-            <!-- Theme Toggle (из оригинала) -->
-            <button id="theme-toggle" class="text-white hover:text-red-500 transition-colors" title="Переключить тему">
-                <i class="fas fa-moon"></i>
-            </button>
-
-            <!-- Burger Menu (новый для мобильного) -->
-            <div class="header-burger md:hidden" id="burger-menu">
+            <div class="header-burger" id="burger-menu">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
         </div>
 
-        <!-- Catalog Dropdown (новый) -->
-        <div class="catalog-dropdown hidden bg-black/90 p-4 rounded-lg mt-2" id="catalog-dropdown">
-            <div class="container mx-auto">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {% for category in menu_categories %}
-                    <a href="{% url 'category' category.slug %}" class="text-white hover:text-red-500">{{ category.name }}</a>
-                    {% empty %}
-                    <span class="text-gray-400">Нет категорий</span>
-                    {% endfor %}
+        <div class="catalog-dropdown" id="catalog-dropdown">
+            <div class="container">
+                <div class="catalog-grid">
+                {% for category in menu_categories %}
+                   <a href="{% url 'category' category.slug %}" class="catalog-item">
+                      {{ category.name }}
+                   </a>
+                {% empty %}
+                   <span class="catalog-item">Нет категорий</span>
+                {% endfor %}
                 </div>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- Mobile Menu (новый) -->
-    <div class="mobile-overlay hidden fixed inset-0 bg-black/80 z-50" id="mobile-menu">
-        <div class="mobile-sidebar bg-gray-900 w-80 h-full p-4">
-            <div class="mobile-header flex justify-between items-center mb-4">
-                <span class="menu-title text-white text-lg">Меню</span>
-                <button class="close-btn text-white" id="close-menu-btn">
-                    <i class="fas fa-times"></i>
+    <div class="mobile-overlay" id="mobile-menu">
+        <div class="mobile-sidebar">
+            <div class="mobile-header">
+                <span class="menu-title">Меню</span>
+                <button class="close-btn" id="close-menu-btn">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <nav class="mobile-menu-content space-y-4">
+
+            <nav class="mobile-menu-content">
                 <div class="mobile-accordion-group">
-                    <div class="mobile-link flex justify-between items-center text-white py-2" id="mobile-catalog-toggle">
-                        <div class="flex items-center space-x-2">
-                            <i class="fas fa-layer-group"></i>
-                            <span>Каталог</span>
-                        </div>
-                        <i class="fas fa-chevron-right arrow"></i>
+                    <div class="mobile-link accordion-toggle">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>Каталог</span>
+                        <i class="fa-solid fa-chevron-right arrow"></i>
                     </div>
-                    <div class="accordion-content hidden pl-4">
-                        {% for category in menu_categories %}
-                        <a href="{% url 'category' category.slug %}" class="mobile-sublink text-gray-400 hover:text-red-500">{{ category.name }}</a>
-                        {% empty %}
-                        <span class="mobile-sublink text-gray-400">Нет категорий</span>
-                        {% endfor %}
+
+                    <div class="accordion-content">
+                    {% for category in menu_categories %}
+                        <a href="{% url 'category' category.slug %}" class="mobile-sublink">
+                            {{ category.name }}
+                        </a>
+                    {% empty %}
+                    <span class="mobile-sublink">Нет категорий</span>
+                    {% endfor %}
                     </div>
                 </div>
-                <a href="{% url 'favorites' %}" class="mobile-link flex justify-between items-center text-white py-2">
-                    <div class="flex items-center space-x-2">
-                        <i class="fas fa-heart"></i>
-                        <span>Избранное</span>
-                    </div>
-                    <i class="fas fa-chevron-right arrow"></i>
+                <a href="{% url 'favorites' %}" class="mobile-link">
+                    <i class="fa-regular fa-heart"></i>
+                    <span>Избранное</span>
+                    <i class="fa-solid fa-chevron-right arrow"></i>
                 </a>
-                <a href="{% url 'cart' %}" class="mobile-link flex justify-between items-center text-white py-2">
-                    <div class="flex items-center space-x-2">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Корзина</span>
-                    </div>
-                    <i class="fas fa-chevron-right arrow"></i>
+                <a href="{% url 'cart' %}" class="mobile-link">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Корзина</span>
+                    <i class="fa-solid fa-chevron-right arrow"></i>
                 </a>
                 {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}" class="mobile-link flex justify-between items-center text-white py-2">
-                    <div class="flex items-center space-x-2">
-                        <i class="fas fa-user"></i>
-                        <span>{{ user.first_name|default:"Профиль" }}</span>
-                    </div>
+                <a href="{% url 'profile' %}" class="mobile-link login-link">
+                    <i class="fa-regular fa-user"></i>
+                    <span>{{ user.first_name|default:"Профиль" }}</span>
                 </a>
                 {% else %}
-                <a href="{% url 'login' %}" class="mobile-link flex justify-between items-center text-white py-2">
-                    <div class="flex items-center space-x-2">
-                        <i class="fas fa-user"></i>
-                        <span>Войти / Регистрация</span>
-                    </div>
+                <a href="{% url 'login' %}" class="mobile-link login-link">
+                    <i class="fa-regular fa-user"></i>
+                    <span>Войти / Регистрация</span>
                 </a>
                 {% endif %}
+                <button class="theme-toggle-btn mobile-theme-toggle" id="mobile-theme-toggle">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
             </nav>
         </div>
     </div>
 </header>
-
-<style>
-    /* Адаптированные стили для светлой темы (из оригинала) */
-    body.light-theme .header-gradient {
-        background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 50%, #ffffff 100%);
-        border-bottom: 1px solid #e2e8f0;
-    }
-    body.light-theme .header-topbar {
-        background: rgba(255, 255, 255, 0.8);
-        color: #2d3748;
-    }
-    body.light-theme .header-topbar .text-white { color: #2d3748 !important; }
-    body.light-theme .header-topbar a { color: #2d3748 !important; }
-    body.light-theme .header-catalog-btn { background: #e2e8f0; color: #2d3748; }
-    body.light-theme .header-search { background: #e2e8f0; }
-    body.light-theme .header-input { color: #2d3748; }
-    body.light-theme .header-icons a { color: #2d3748; }
-    body.light-theme .mobile-sidebar { background: #f8f9fa; }
-    body.light-theme .mobile-link { color: #2d3748; }
-</style>
-
-<script>
-    // JavaScript для header (адаптировано из оригинала и нового)
-    document.addEventListener('DOMContentLoaded', function() {
-        // Переключение темы
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = themeToggle.querySelector('i');
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            document.body.classList.add('light-theme');
-            themeIcon.className = 'fas fa-sun';
-        }
-        themeToggle.addEventListener('click', function() {
-            if (document.body.classList.contains('light-theme')) {
-                document.body.classList.remove('light-theme');
-                localStorage.setItem('theme', 'dark');
-                themeIcon.className = 'fas fa-moon';
-            } else {
-                document.body.classList.add('light-theme');
-                localStorage.setItem('theme', 'light');
-                themeIcon.className = 'fas fa-sun';
-            }
-        });
-
-        // Каталог dropdown
-        const catalogBtn = document.getElementById('catalog-btn');
-        const catalogDropdown = document.getElementById('catalog-dropdown');
-        catalogBtn.addEventListener('click', () => {
-            catalogDropdown.classList.toggle('hidden');
-        });
-
-        // Мобильное меню
-        const burgerMenu = document.getElementById('burger-menu');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const closeMenuBtn = document.getElementById('close-menu-btn');
-        burgerMenu.addEventListener('click', () => mobileMenu.classList.remove('hidden'));
-        closeMenuBtn.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-
-        // Аккордеон в мобильном меню
-        const mobileCatalogToggle = document.getElementById('mobile-catalog-toggle');
-        const accordionContent = document.querySelector('.accordion-content');
-        mobileCatalogToggle.addEventListener('click', () => {
-            accordionContent.classList.toggle('hidden');
-        });
-    });
-</script>

@@ -1,432 +1,66 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DvrnTechStore - Магазин техники</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Все оригинальные стили из вашего HTML */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            color: #ffffff;
-            min-height: 100vh;
-            transition: all 0.3s ease;
-        }
-
-        .header-gradient {
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
-            transition: all 0.3s ease;
-        }
-
-        .product-card {
-            background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
-            border: 1px solid #333;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(255, 59, 59, 0.2);
-            border-color: #ff3b3b;
-        }
-
-        .neon-glow {
-            text-shadow: 0 0 10px rgba(255, 59, 59, 0.7), 0 0 20px rgba(255, 59, 59, 0.4);
-        }
-
-        .gradient-text {
-            background: linear-gradient(45deg, #ff3b3b, #ff6b6b, #ff3b3b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .section-border {
-            border-bottom: 1px solid #333;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #ff3b3b, #ff6b6b);
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 59, 59, 0.4);
-        }
-
-        .category-btn {
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .category-btn:hover {
-            border-color: #ff3b3b;
-            transform: scale(1.05);
-        }
-
-        .category-btn.active {
-            border-color: #ff3b3b;
-            background: rgba(255, 59, 59, 0.1);
-        }
-
-        .cart-badge {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .carousel-item {
-            transition: transform 0.5s ease;
-        }
-
-        .add-to-cart {
-            transition: all 0.3s ease;
-        }
-
-        .add-to-cart.added {
-            background: #00ff00 !important;
-            color: #000 !important;
-        }
-
-        .scroll-smooth {
-            scroll-behavior: smooth;
-        }
-
-        /* Кнопка избранного */
-        .favorite-btn {
-            transition: all 0.3s ease;
-        }
-
-        .favorite-btn.active {
-            background: #ff3b3b !important;
-            color: white !important;
-        }
-
-        .favorite-btn.active i {
-            color: white !important;
-        }
-
-        /* Светлая тема - ПОЛНОСТЬЮ ПЕРЕПИСАНА */
-        body.light-theme {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            color: #2d3748;
-        }
-
-        body.light-theme .header-gradient {
-            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 50%, #ffffff 100%);
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        body.light-theme .product-card {
-            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-            border: 2px solid #ff3b3b; /* Красная рамка */
-            box-shadow: 0 4px 25px rgba(255, 59, 59, 0.15);
-            color: #2d3748;
-        }
-
-        body.light-theme .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 35px rgba(255, 59, 59, 0.25);
-            border-color: #ff3b3b;
-        }
-
-        body.light-theme .neon-glow {
-            text-shadow: 0 0 4px rgba(255, 59, 59, 0.3), 0 0 8px rgba(255, 59, 59, 0.15);
-            color: #c53030; /* Менее яркий красный для лучшей читаемости */
-        }
-
-        body.light-theme .gradient-text {
-            background: linear-gradient(45deg, #d94a4a, #e06b6b, #d94a4a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        body.light-theme .section-border {
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        body.light-theme .btn-primary {
-            background: linear-gradient(45deg, #ff3b3b, #ff6b6b);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 59, 59, 0.3);
-        }
-
-        body.light-theme .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 59, 59, 0.4);
-        }
-
-        body.light-theme .category-btn.active {
-            border-color: #ff3b3b;
-            background: rgba(255, 59, 59, 0.1);
-        }
-
-        body.light-theme .cart-badge {
-            background-color: #ff3b3b;
-            color: white;
-        }
-
-        body.light-theme .text-gray-300 {
-            color: #718096 !important;
-        }
-
-        body.light-theme .text-gray-400 {
-            color: #a0aec0 !important;
-        }
-
-        body.light-theme .bg-black {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
-        }
-
-        body.light-theme .bg-gray-900 {
-            background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 100%) !important;
-        }
-
-        body.light-theme .bg-gradient-to-b {
-            background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%) !important;
-        }
-
-        body.light-theme footer {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
-            color: #2d3748;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        body.light-theme footer a {
-            color: #4a5568 !important;
-        }
-
-        body.light-theme footer a:hover {
-            color: #ff3b3b !important;
-        }
-
-        body.light-theme .header-gradient a,
-        body.light-theme .header-gradient button {
-            color: #2d3748 !important;
-        }
-
-        body.light-theme .header-gradient a:hover,
-        body.light-theme .header-gradient button:hover {
-            color: #ff3b3b !important;
-        }
-
-        body.light-theme .border-gray-600 {
-            border-color: #cbd5e0 !important;
-        }
-
-        body.light-theme .hover\:border-red-500:hover {
-            border-color: #ff3b3b !important;
-        }
-
-        body.light-theme .bg-gray-700 {
-            background-color: #cbd5e0 !important;
-        }
-
-        body.light-theme .bg-gray-800 {
-            background-color: #e2e8f0 !important;
-        }
-
-        body.light-theme .bg-red-600 {
-            background-color: #ff3b3b !important;
-        }
-
-        body.light-theme .text-red-500 {
-            color: #ff3b3b !important;
-        }
-
-        body.light-theme .text-green-500 {
-            color: #38a169 !important;
-        }
-
-        body.light-theme .bg-red-600\/50 {
-            background-color: rgba(255, 59, 59, 0.5) !important;
-        }
-
-        body.light-theme .bg-black\/50 {
-            background-color: rgba(0, 0, 0, 0.1) !important;
-        }
-
-        /* Дополнительные стили для слайдеров (адаптировано из вашего нового примера) */
-        .slider-container {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            overflow: hidden;
-            margin-bottom: 2rem;
-        }
-
-        .slide {
-            display: none;
-            width: 100%;
-            height: 100%;
-        }
-
-        .slide.active {
-            display: block;
-        }
-
-        .slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .prev-btn, .next-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .prev-btn {
-            left: 10px;
-        }
-
-        .next-btn {
-            right: 10px;
-        }
-
-        .popular-category {
-            margin-bottom: 2rem;
-        }
-
-        .category-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .category-item {
-            background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
-            border: 1px solid #333;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .category-item:hover {
-            transform: translateY(-5px);
-            border-color: #ff3b3b;
-        }
-
-        .category-item img {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 0.5rem;
-        }
-
-        .products-container {
-            margin-bottom: 2rem;
-        }
-
-        .products-title {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-
-        .multi-slider-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .multi-slider-track-container {
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .multi-slider-track {
-            display: flex;
-            gap: 1rem;
-            transition: transform 0.3s ease;
-        }
-
-        .ms-btn {
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-        }
-
-        .badge-discount {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: #ff3b3b;
-            color: white;
-            padding: 5px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-
-        .price .new-price {
-            font-weight: bold;
-            color: #ff3b3b;
-        }
-
-        .currency {
-            font-size: 0.8rem;
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Css -->
+    <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+
+    <title>Главная</title>
 </head>
-<body class="scroll-smooth">
+
+<body>
     {% include 'includes/header.html' %}
 
-    <main id="main" class="main">
-        <div class="container mx-auto px-4 pt-32">
-            <!-- Слайдер баннеров (вместо Hero Section) -->
-            <div class="slider-container">
-                {% for banner in banners %}
-                <div class="slide {% if forloop.first %}active{% endif %}">
-                    <img src="{{ banner.image.url }}" alt="{{ banner.title|default:'Баннер' }}" />
-                </div>
-                {% empty %}
-                <div class="slide active">
-                    <img src="{% static 'banner/default.jpg' %}" alt="Default Banner" />
-                </div>
-                {% endfor %}
+    <main id='main' class="main">
+        <!-- Hero-блок -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="slider-container">
+                    {% for banner in banners %}
+                        <div class="slide {% if forloop.first %}active{% endif %}">
+                            <img src="{{ banner.image.url }}" alt="{{ banner.title|default:'Баннер' }}" />
+                            <div class="hero-overlay">
+                                <h1 class="hero-title">MD Smart</h1>
+                                <p class="hero-subtitle">Качественная техника по лучшим ценам</p>
+                                <a href="{% url 'category' 'all' %}" class="hero-cta-btn">Каталог товаров</a>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="slide active">
+                            <img src="{% static 'banner/default.jpg' %}" alt="Default Banner" />
+                            <div class="hero-overlay">
+                                <h1 class="hero-title">MD Smart</h1>
+                                <p class="hero-subtitle">Качественная техника по лучшим ценам</p>
+                                <a href="{% url 'category' 'all' %}" class="hero-cta-btn">Каталог товаров</a>
+                            </div>
+                        </div>
+                    {% endfor %}
 
-                {% if banners.count > 1 %}
-                <button class="prev-btn">❮</button>
-                <button class="next-btn">❯</button>
-                {% endif %}
+                    {% if banners.count > 1 %}
+                        <button class="prev-btn">❮</button>
+                        <button class="next-btn">❯</button>
+                    {% endif %}
+                </div>
             </div>
+        </section>
 
-            <!-- Популярные категории -->
-            <div class="popular-category">
+        <!-- Популярные категории -->
+        <section class="categories-section">
+            <div class="container">
                 <div class="category-list">
                     {% for category in categories %}
                     <a href="{% url 'category' category.slug %}" class="category-link">
                         <div class="category-item">
                             {% if category.image %}
-                            <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                                <img src="{{ category.image.url }}" alt="{{ category.name }}">
                             {% endif %}
                             <span class="category-name">{{ category.name }}</span>
                         </div>
@@ -434,19 +68,21 @@
                     {% endfor %}
                 </div>
             </div>
+        </section>
 
-            <!-- Хиты продаж и новинки (слайдер продуктов) -->
-            <div class="products-container">
-                <h2 class="products-title gradient-text">Хиты продаж и новинки</h2>
+        <!-- Хиты продаж и новинки -->
+        <section class="products-section">
+            <div class="container">
+                <h2 class="section-title">Хиты продаж и новинки</h2>
                 <div class="multi-slider-wrapper">
-                    <button class="ms-btn ms-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="ms-btn ms-prev"><i class="fa-solid fa-chevron-left"></i></button>
                     <div class="multi-slider-track-container">
                         <div class="multi-slider-track">
                             {% for product in products %}
-                            <div class="product-card rounded-xl p-4 min-w-[250px]">
+                            <div class="product-card">
                                 <form action="{% url 'toggle_favorite' product.id %}" method="POST">
                                     {% csrf_token %}
-                                    <button class="favorite-btn w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" type="submit">
+                                    <button class="favorite-btn" type="submit">
                                         {% if product.id in favorite_product_ids %}
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="red" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -458,234 +94,128 @@
                                         {% endif %}
                                     </button>
                                 </form>
-
                                 {% with discount=product.active_discount %}
-                                {% if discount %}
-                                <div class="badge-discount">-{{ discount.percent }}%</div>
-                                {% endif %}
+                                    {% if discount %}
+                                        <div class="badge-discount">-{{ discount.percent }}%</div>
+                                    {% endif %}
                                 {% endwith %}
-
                                 <a href="{% url 'product_detail' product.slug %}">
                                     {% if product.main_image %}
-                                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="w-full h-48 object-cover rounded-lg mb-4">
+                                        <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="product-image">
                                     {% endif %}
                                 </a>
-                                <h3 class="font-semibold text-lg mb-2">{{ product.name }}</h3>
+                                <h3 class="product-title">{{ product.name }}</h3>
                                 <div class="price">
                                     {% if product.active_discount %}
-                                    <span class="new-price">{{ product.discounted_price }} <span class="currency">сом</span></span>
+                                        <span class="new-price">{{ product.discounted_price }} <span class="currency">сом</span></span>
                                     {% else %}
-                                    <span class="new-price">{{ product.price }} <span class="currency">сом</span></span>
+                                        <span class="new-price">{{ product.price }} <span class="currency">сом</span></span>
                                     {% endif %}
                                 </div>
                                 <a href="{% url 'product_detail' product.slug %}">
-                                    <button class="add-to-cart w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">В корзину</button>
+                                    <button class="add-to-cart-btn">В корзину</button>
                                 </a>
                             </div>
                             {% endfor %}
                         </div>
                     </div>
-                    <button class="ms-btn ms-next"><i class="fas fa-chevron-right"></i></button>
+                    <button class="ms-btn ms-next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
+        </section>
 
-            <!-- Акционные товары (слайдер продуктов) -->
-            <div class="products-container">
-                <h2 class="products-title gradient-text">Акционные товары</h2>
+        <!-- Акционные товары -->
+        <section class="products-section">
+            <div class="container">
+                <h2 class="section-title">Акционные товары</h2>
                 <div class="multi-slider-wrapper">
-                    <button class="ms-btn ms-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="ms-btn ms-prev"><i class="fa-solid fa-chevron-left"></i></button>
                     <div class="multi-slider-track-container">
                         <div class="multi-slider-track">
                             {% for product in discount_products %}
-                            <div class="product-card rounded-xl p-4 min-w-[250px]">
+                            <div class="product-card">
                                 <form action="{% url 'toggle_favorite' product.id %}" method="POST">
                                     {% csrf_token %}
-                                    <button class="favorite-btn w-10 h-10 bg-gray-700 text-white rounded-lg hover:bg-red-600" type="submit">
+                                    <button type="submit" class="favorite-btn">
                                         {% if product.id in favorite_product_ids %}
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="red" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                                             </svg>
                                         {% else %}
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                                             </svg>
                                         {% endif %}
                                     </button>
                                 </form>
-
                                 {% with discount=product.active_discount %}
-                                {% if discount %}
-                                <div class="badge-discount">-{{ discount.percent }}%</div>
-                                {% endif %}
+                                    {% if discount %}
+                                    <div class="badge-discount">-{{ discount.percent }}%</div>
+                                    {% endif %}
                                 {% endwith %}
-
                                 <a href="{% url 'product_detail' product.slug %}">
                                     {% if product.main_image %}
-                                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="w-full h-48 object-cover rounded-lg mb-4">
+                                        <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="product-image">
                                     {% endif %}
                                 </a>
-                                <h3 class="font-semibold text-lg mb-2">{{ product.name }}</h3>
+                                <h3 class="product-title">{{ product.name }}</h3>
                                 <div class="price">
                                     <span class="new-price">{{ product.discounted_price }} <span class="currency">сом</span></span>
                                 </div>
                                 <a href="{% url 'product_detail' product.slug %}">
-                                    <button class="add-to-cart w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">В корзину</button>
+                                    <button class="add-to-cart-btn">В корзину</button>
                                 </a>
                             </div>
                             {% endfor %}
                         </div>
                     </div>
-                    <button class="ms-btn ms-next"><i class="fas fa-chevron-right"></i></button>
+                    <button class="ms-btn ms-next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta-section">
+            <div class="container">
+                <h2 class="cta-title">Готовы к покупкам?</h2>
+                <p class="cta-subtitle">Найдите идеальный товар в нашем каталоге</p>
+                <a href="{% url 'category' 'all' %}" class="cta-btn">Перейти в каталог</a>
+            </div>
+        </section>
     </main>
 
     {% include 'includes/footer.html' %}
 
+    <script src="{% static 'js/components.js' %}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Переключение темы
-            const themeToggle = document.getElementById('theme-toggle');
-            const themeIcon = themeToggle.querySelector('i');
+        document.querySelectorAll('.multi-slider-wrapper').forEach(wrapper => {
+            const container = wrapper.querySelector('.multi-slider-track-container');
+            const prevBtn = wrapper.querySelector('.ms-prev');
+            const nextBtn = wrapper.querySelector('.ms-next');
 
-            // Проверяем сохраненную тему
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-theme');
-                themeIcon.className = 'fas fa-sun';
-            }
+            const moveSlide = (direction) => {
+                const card = wrapper.querySelector('.product-card');
+                if (!card) return;
 
-            themeToggle.addEventListener('click', function() {
-                if (document.body.classList.contains('light-theme')) {
-                    document.body.classList.remove('light-theme');
-                    localStorage.setItem('theme', 'dark');
-                    themeIcon.className = 'fas fa-moon';
+                const cardWidth = card.offsetWidth;
+                const gap = 16;
+                const scrollAmount = cardWidth + gap;
+
+                if (direction === 'next') {
+                    container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
                 } else {
-                    document.body.classList.add('light-theme');
-                    localStorage.setItem('theme', 'light');
-                    themeIcon.className = 'fas fa-sun';
+                    container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
                 }
-            });
+            };
 
-            // Кнопки избранного
-            const favoriteButtons = document.querySelectorAll('.favorite-btn');
-
-            // Восстанавливаем состояние избранного из localStorage
-            favoriteButtons.forEach(btn => {
-                const productId = btn.getAttribute('data-product-id');
-                const isFavorite = localStorage.getItem(`favorite_${productId}`) === 'true';
-
-                if (isFavorite) {
-                    btn.classList.add('active');
-                }
-            });
-
-            // Обработчик клика на кнопки избранного
-            favoriteButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const productId = this.getAttribute('data-product-id');
-
-                    if (this.classList.contains('active')) {
-                        this.classList.remove('active');
-                        localStorage.setItem(`favorite_${productId}`, 'false');
-                    } else {
-                        this.classList.add('active');
-                        localStorage.setItem(`favorite_${productId}`, 'true');
-                    }
-                });
-            });
-
-            // Add to cart functionality
-            const addToCartButtons = document.querySelectorAll('.add-to-cart');
-            addToCartButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    this.classList.add('added');
-                    this.textContent = 'Добавлено!';
-
-                    // Update cart badge
-                    const cartBadge = document.querySelector('.cart-badge');
-                    let count = parseInt(cartBadge.textContent);
-                    cartBadge.textContent = count + 1;
-
-                    setTimeout(() => {
-                        this.classList.remove('added');
-                        this.textContent = 'В корзину';
-                    }, 2000);
-                });
-            });
-
-            // Category buttons
-            const categoryButtons = document.querySelectorAll('.category-btn');
-            categoryButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    categoryButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-
-            // Smooth scrolling for navigation
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-
-            // Слайдер баннеров (адаптировано из вашего нового примера)
-            const slides = document.querySelectorAll('.slide');
-            const prevBtn = document.querySelector('.prev-btn');
-            const nextBtn = document.querySelector('.next-btn');
-            let currentSlide = 0;
-
-            function showSlide(index) {
-                slides.forEach(slide => slide.classList.remove('active'));
-                slides[index].classList.add('active');
-            }
-
-            if (prevBtn && nextBtn) {
-                prevBtn.addEventListener('click', () => {
-                    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                    showSlide(currentSlide);
-                });
-
-                nextBtn.addEventListener('click', () => {
-                    currentSlide = (currentSlide + 1) % slides.length;
-                    showSlide(currentSlide);
-                });
-            }
-
-            // Слайдеры продуктов (адаптировано из вашего нового примера)
-            document.querySelectorAll('.multi-slider-wrapper').forEach(wrapper => {
-                const container = wrapper.querySelector('.multi-slider-track-container');
-                const prevBtn = wrapper.querySelector('.ms-prev');
-                const nextBtn = wrapper.querySelector('.ms-next');
-
-                const moveSlide = (direction) => {
-                    const card = wrapper.querySelector('.product-card');
-                    if (!card) return;
-
-                    const cardWidth = card.offsetWidth;
-                    const gap = 16;
-                    const scrollAmount = cardWidth + gap;
-
-                    if (direction === 'next') {
-                        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-                    } else {
-                        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-                    }
-                };
-
-                nextBtn.addEventListener('click', () => moveSlide('next'));
-                prevBtn.addEventListener('click', () => moveSlide('prev'));
-            });
+            nextBtn.addEventListener('click', () => moveSlide('next'));
+            prevBtn.addEventListener('click', () => moveSlide('prev'));
         });
+
     </script>
+
+    <script src="{% static 'js/header.js' %}" defer></script>
+    <script src="{% static 'js/slider.js' %}"></script>
 </body>
+
 </html>

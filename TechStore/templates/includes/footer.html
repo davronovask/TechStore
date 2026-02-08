@@ -1,44 +1,43 @@
 {% load static %}
-<footer class="bg-black py-12 section-border">
-    <div class="container mx-auto px-4">
-        <div class="footer-top grid md:grid-cols-4 gap-8">
-            <!-- Brand Column -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-top">
             <div class="footer-col brand-col">
-                <div class="logo-area flex items-center space-x-3 mb-4">
+                <div class="logo-area">
                     <a href="{% url 'home' %}">
-                        <img class="logo-img w-10 h-10" src="{% static 'logo.png' %}" alt="Logo" />
+                        <img class="logo-img" src="{% static 'logo.png' %}" alt="Logo" />
                     </a>
                     <div class="logo-text">
-                        <span class="logo-title text-xl font-bold gradient-text">MD Smart</span>
-                        <span class="sub-logo text-gray-400">Интернет магазин</span>
+                        <span class="logo-title">MD Smart</span>
+                        <span class="sub-logo">Интернет магазин</span>
                     </div>
                 </div>
-                <p class="footer-desc text-gray-400">
+                <p class="footer-desc">
                     Качественная техника<br />
                     по лучшим ценам!
                 </p>
             </div>
 
-            <!-- Contacts Column -->
+            <!-- Колонка 2: Контакты -->
             <div class="footer-col">
-                <h3 class="text-lg font-semibold mb-4 gradient-text">Свяжитесь с нами</h3>
-                <ul class="footer-links contact-links space-y-2">
-                    <li class="flex items-center space-x-2">
-                        <div class="contact-links-icon text-red-500">
-                            <i class="fas fa-phone"></i>
+                <h3>Свяжитесь с нами</h3>
+                <ul class="footer-links contact-links">
+                    <li>
+                        <div class="contact-links-icon">
+                            <i class="fa-solid fa-phone-volume"></i>
                         </div>
                         {% if social_links.whatsapp %}
-                        <a href="https://wa.me/{{ social_links.whatsapp }}" target="_blank" class="text-gray-400 hover:text-red-500">
+                        <a href="https://wa.me/{{ social_links.whatsapp }}" target="_blank">
                             +{{ social_links.whatsapp }}
                         </a>
                         {% endif %}
                     </li>
-                    <li class="flex items-center space-x-2">
-                        <div class="contact-links-icon text-red-500">
-                            <i class="fas fa-paper-plane"></i>
+                    <li>
+                        <div class="contact-links-icon">
+                            <i class="fa-solid fa-paper-plane"></i>
                         </div>
                         {% if social_links.telegram %}
-                        <a href="https://t.me/{{ social_links.telegram }}" target="_blank" class="text-gray-400 hover:text-red-500">
+                        <a href="https://t.me/{{ social_links.telegram }}" target="_blank">
                             @{{ social_links.telegram }}
                         </a>
                         {% endif %}
@@ -46,40 +45,74 @@
                 </ul>
             </div>
 
-            <!-- Social Column -->
+            <!-- Колонка 3: Соцсети -->
             <div class="footer-col">
-                <h3 class="text-lg font-semibold mb-4 gradient-text">Следите за нами</h3>
-                <ul class="footer-links social-links space-y-2">
+                <h3>Следите за нами</h3>
+                <ul class="footer-links social-links">
                     {% if social_links.instagram %}
-                    <li class="flex items-center space-x-2">
-                        <a href="https://www.instagram.com/{{ social_links.instagram }}" class="social-btn instagram w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600">
-                            <i class="fab fa-instagram"></i>
+                    <li>
+                        <a href="https://www.instagram.com/{{ social_links.instagram }}" class="social-btn instagram">
+                            <i class="fa-brands fa-instagram"></i>
                         </a>
-                        <span class="social-text text-gray-400">@{{ social_links.instagram }}</span>
+                        <span class="social-text">@{{ social_links.instagram }}</span>
                     </li>
                     {% endif %}
                     {% if social_links.telegram %}
-                    <li class="flex items-center space-x-2">
-                        <a href="https://t.me/{{ social_links.telegram }}" class="social-btn telegram w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600">
-                            <i class="fab fa-telegram"></i>
+                    <li>
+                        <a href="https://t.me/{{ social_links.telegram }}" class="social-btn telegram">
+                            <i class="fa-brands fa-telegram"></i>
                         </a>
-                        <span class="social-text text-gray-400">@{{ social_links.telegram }}</span>
+                        <span class="social-text">@{{ social_links.telegram }}</span>
                     </li>
                     {% endif %}
                 </ul>
             </div>
 
-            <!-- Payment Column -->
+            <!-- Колонка 4: Оплата -->
             <div class="footer-col">
-                <h3 class="text-lg font-semibold mb-4 gradient-text">Способы оплаты</h3>
-                <div class="payment-methods flex space-x-2">
-                    <div class="pay-card w-12 h-8 bg-white rounded flex items-center justify-center">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" class="w-full h-full object-contain" />
+                <h3>Способы оплаты</h3>
+                <div class="payment-methods">
+                    <!-- Visa -->
+                    <div class="pay-card">
+                        <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg"
+                            alt="Visa"
+                        />
                     </div>
-                    <div class="pay-card w-12 h-8 bg-white rounded flex items-center justify-center">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" class="w-full h-full object-contain" />
+
+                    <!-- Mastercard -->
+                    <div class="pay-card">
+                        <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+                            alt="Mastercard"
+                        />
                     </div>
-                    <div class="pay-card w-12 h-8 bg-white rounded flex items-center justify-center">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/UnionPay_logo.svg" alt="UnionPay" class="w-full h-full object-contain" />
+
+                    <!-- UnionPay -->
+                    <div class="pay-card">
+                        <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/1/1b/UnionPay_logo.svg"
+                            alt="UnionPay"
+                        />
                     </div>
-                    <div class="pay-card w-12 h-8 bg-white
+                    <div class="pay-card">
+                        <img src="{% static 'elcard_logo.png' %}" alt="Elcard" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-bottom">
+          <p>© 2025 MD Smart. Все права защищены.</p>
+
+          <div class="footer-bottom-group">
+            <a href="{% url 'offer' %}">Публичная оферта</a>
+            <span>&nbsp;|&nbsp;</span>
+            <a href="{% url 'privacy_policy' %}">Политика конфиденциальности</a>
+          </div>
+        </div>
+
+    </div>
+</footer>
